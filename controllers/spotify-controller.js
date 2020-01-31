@@ -30,7 +30,11 @@ module.exports = function (app) {
       console.log("Spotify Data:");
       console.log(scrapedata);
 
+      // First for loop runs # of times depending on length of Spotify Artist's genre tags
+
       for (let j = 0; j < scrapedata.artist_genres.length; j++) {
+
+        // Second for loop runs # of times depending on length of Spotify cityData length
 
         for (let i = 0; i < scrapedata.cityData.length; i++) {
 
