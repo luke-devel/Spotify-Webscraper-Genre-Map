@@ -29,26 +29,41 @@ module.exports = function (app) {
     function insertrecord(scrapedata) {
       console.log("Spotify Data:");
       console.log(scrapedata);
-      for (let i = 0; i < scrapedata.cityData.length; i++) {
 
-        let record = {
-          artist_ID: artistID,
-          artist_name: scrapedata.artist_name,
-          artist_genres: scrapedata.artist_genres[0],
-          country: scrapedata.cityData[i].country,
-          city: scrapedata.cityData[i].city,
-          listeners: scrapedata.cityData[i].listeners
+      // First for loop runs # of times depending on length of Spotify Artist's genre tags
+
+      for (let j = 0; j < scrapedata.artist_genres.length; j++) {
+
+        // Second for loop runs # of times depending on length of Spotify cityData length
+
+        for (let i = 0; i < scrapedata.cityData.length; i++) {
+
+          let record = {
+            artist_ID: artistID,
+            artist_name: scrapedata.artist_name,
+            artist_genres: scrapedata.artist_genres[j],
+            country: scrapedata.cityData[i].country,
+            city: scrapedata.cityData[i].city,
+            listeners: scrapedata.cityData[i].listeners
+          }
+
+
+          db.Spotify.create(record)
+
+            .then(function (results) {
+              // `results` here would be the newly created table with unique artist and location information
+              // res.json(results);
+              console.log(results);
+            });
+
         }
-
-
-        db.Spotify.create(record)
-
-          .then(function (results) {
-            // `results` here would be the newly created table with unique artist and location information
-            // res.json(results);
-            console.log(results);
-          });
       }
+
+
+
+
+
+
       res.json("Insert scrape data");
     }
   });
