@@ -1,61 +1,209 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Spotify Weather Map</title>
 
-<head>
-  <meta charset="UTF-8">
-  <title>title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--MATERIALIZE WEB COMPONENTS LINKS-->
+    <link rel=”stylesheet” href=”https://unpkg.com/material-components-web/dist/material-components-web.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--MATERIAL ICONS-->
+    <link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">  
+    <!--MATERIALIZE CSS-->
+    <link rel = "stylesheet"  
+       href = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">  
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-  <!-- jQuery -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-  <!-- CSS -->
-  <link rel="stylesheet" type="text/css" href="css/style.css">
-  </link>
-
-
-
-</head>
-
-<body>
+    <!--JQUERY-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <!--GOOGLE FONTS-->
+    <link href="https://fonts.googleapis.com/css?family=Cabin|Heebo|Noto+Serif+SC&display=swap" rel="stylesheet">
+    <!-- Compiled and minified Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+          <!--MATERIALIZE JS-->  
 
 
-  <div class="container">
+    <!--THIS IS THE PROBLEMATIC CUSTOM CSS -->
+    <!--THIS FILE IS GENERATING THE MIME ERROR, SO I'VE COMMENTED IT OUT-->
+    <!-- <link rel="stylesheet" type="text/css" href="styles.css"></link>
+   -->
+    <!--MAPBOX HEAD SCRIPT-->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
 
-    <div class="row">
-      <div class="col-sm-8 col-sm-offset-2">
+<!--
+/*
+    ==============================================================
+     THIS STYLE CODE IS PLACING MAPBOX IN THE DIV id="map"
+ 
+    ==============================================================
+*/
+-->
+ <style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; height: 100%; width: 100%; }
+    #mapInfoDiv { position: absolute; height: 100%; width: 25%; right : 0 }
+    ul.dropdown-menu{
+    position:static;
+    float:none;
+    width:20rem;
+  }
+/*
+    ==============================================================
+      CUSTOM CSS BEGINS / FONTS
+    ==============================================================
+*/
 
-        <p class="cool-font">Artist ID</p>
-        <textarea class="form-control" rows="3" id="artist-input" placeholder="Enter artist id here!"></textarea>
-        <button id="artist-submit" class="btn btn-lg pull-right">Submit!</button>
-      </div>
+h1 { 
+    font-family: 'Heebo', sans-serif;
+}
+h2 {
+    font-family: 'Cabin', sans-serif;
+}
+h3 {
+    font-family: 'Heebo', sans-serif;
+    font-size: 2rem;
+}
+h4 {
+    font-family: 'Cabin', sans-serif;
+    font-size:1.5rem;
+}
+p {
+    font-family: 'Noto Serif SC', serif;
+}
+  </style>
+  </head>
+
+
+  <body>
+  
+<!--
+  ================================================================
+    TOP ROW HORIZONTAL NAVBAR
+  ================================================================
+--> 
+    <div class="w3-bar w3-black w3-xlarge">
+      <a class="foo-button mdc-button w3-bar-item w3-button" href="#"><i class="fa fa-bars"></i></a>
+      <span class="w3-bar-item"><h3>Spotify Weather Map</h3></span>  
     </div>
 
+<!--
+  ================================================================
+    CURRENTLY TRACKING ROW (insert heatmap color code here)
+  ================================================================
+-->
+    <div p class="w3-green accent-3 w3-hover-white w3-text-black w3-bar" style="height:4rem">
+     
+<!--
+  ================================================================
+    SEARCH BY ARTIST BUTTON
+  ================================================================
+-->
+      <!--THIS IS THE SEARCH BY ARTIST BUTTON-->
+      <a href="#" class="btn dropdown-trigger btn button w3-bar-item w3-button w3-green accent-3 w3-hover-black" data-target = "dropdownArtist" data-activates="dropdownArtist" style="height:4rem;"><h4>Search by Artist</h4><i class="fa fa-search"></i></a>
+       
+      <div id = "dropdownArtist" class = "dropdown-content w3-text-black " style="z-index: 2;">
+          <h4 class="form-control" id="artist-input">
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input placeholder="Enter here" id="artist_name" type="text" class="w3-text-black validate">
+                    <label for="first_name">Artist's Name</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <button id="artist-submit" class="foo-button mdc-button w3-button w3-green">Submit!</button>
+          </h4>
+        </div>
+
+<!--
+  ================================================================
+    SEARCH BY GENRE BUTTON
+  ================================================================
+-->
+        <!--THIS IS THE SEARCH BY GENRE BUTTON-->
+        <a href="#" class="btn dropdown-trigger btn button w3-bar-item w3-button w3-green accent-3 w3-hover-black" data-target = "dropdownGenre" data-activates = "dropdownGenre" style="height:4rem;"><h4>Search by Genre</h4><i class="fa fa-search"></i></a>
+ 
+        <div id = "dropdownGenre" class = "dropdown-content w3-text-black " style="z-index: 2;">
+          <h4 class="form-control" id="genre-input">
+            <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input placeholder="Enter here" id="artist_name" type="text" class="w3-text-black validate">
+                    <label for="first_name">Genre Name</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <button id="genre-submit" class="foo-button mdc-button w3-button w3-green">Submit!</button>
+          </h4>
+        </div>
+        <span class="w3-bar-item"><h4>Currently Tracking: </h4></span> 
+   </div>
 
 
+<!--
+  ================================================================
+    THIS IS THE ACTUAL MAP
+  ================================================================
+-->
+  <div class="col s12" id='map' ></div>
+  <!--
+  ================================================================
+    THIS IS THE RIGHT-HAND SIDE-NAV
+    This area could include choices triggered by dropdowns OR
+    it could contain important information about genre (or artists)
+  ================================================================
+-->
+  <div class="row w3-black">
+    <div class="col s3 w3-black" id="mapInfoDiv">
+     THIS IS AN AREA WHERE THE MORE COMPLEX LOGIC OF GENRE CHOICE CAN BE WORKED OUT (checkboxes?)
+    </div>
+  </div>  
 
 
+  <!--
+  ================================================================
+    SCRIPT TAGS BEGIN (THESE SHOULD BE BROKEN INTO LINKED JS FILES 
+    AS MUCH AS POSSIBLE, BUT I'LL WAIT TO SIMPLIFY THIS BRANCH)
+
+    THE FIRST SCRIPT TAG IS A MAPBOX ACCESS TOKEN AND A LINK TO
+    THE BASIC MAP I RENDERED IN MAPBOX STUDIO... THE HEATMAP WILL
+    BE LAYERED ON TOP OF THIS THROUGH API CALLS THAT INSTRUCT MAPBOX
+    STUDIO TO TAKE IN DATA AND TO RENDER COLORS, SHAPES, & LOCATIONS  
+  ================================================================
+-->
+   <script>
+   mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGhld2ZyZWlsbHkiLCJhIjoiY2s1dW9mYmR1MWJ0cjNtb25lY240N3oxYyJ9.oUoPX11hY_Rz6ausgTENyw';
+   var map = new mapboxgl.Map({
+   container: 'map',
+   style: 'mapbox://styles/matthewfreilly/ck6136quy01761iml3gu9dvp3/draft'
+   });
+   </script>
+
+<!--
+  ================================================================
+   THIS IS THE JQUERY THAT INITIALIZES THE DROPDOWNS
+   IT SHOULD PROBABLY BE BROKEN OFF INTO A FILE THAT 
+   CONTAINS THE CLIENT/USER's INPUT (either artist or 
+   genre for now... I'm saving the fun choices here!!! 
+   & keeping all options on the table)
+  ================================================================
+-->
+<script>
+  $('.dropdown-trigger').dropdown();
+  $("#artist-submit").on("click", function (event){ 
+    console.log($("#artist-input").val());})
+  $("#genre-submit").on("click", function (event){ 
+    console.log($("#genre-input").val());})
+</script>
 
 
-    <script>
-      $("#artist-submit").on("click", function (event) {
-        console.log($("#artist-input").val());
-
-        $.ajax({
-          "url": "/api/newdata",
-          method: "post",
-          data: {
-            artistID: $("#artist-input").val()
-          }
-        },
-          function (err, data) {
-            if (err) throw err
-            console.log(data);
-          })
-      })
-    </script>
-</body>
-
+  </body>
 </html>
