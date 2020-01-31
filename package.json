@@ -1,0 +1,28 @@
+{
+  "name": "project-2-spotify",
+  "version": "1.0.0",
+  "description": "and it begins..",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luke-ols0/project-2-spotify.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luke-ols0/project-2-spotify/issues"
+  },
+  "homepage": "https://github.com/luke-ols0/project-2-spotify#readme",
+  "dependencies": {
+    "cherio": "^1.0.0-rc.2",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
+    "request": "^2.88.0",
+    "sequelize": "^5.21.3"
+  }
+}
