@@ -18,9 +18,10 @@
   },
   "homepage": "https://github.com/luke-ols0/project-2-spotify#readme",
   "dependencies": {
-    "cherio": "^1.0.0-rc.2",
+    "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
+    "mysql2": "^2.1.0",
     "path": "^0.12.7",
     "request": "^2.88.0",
     "sequelize": "^5.21.3"
