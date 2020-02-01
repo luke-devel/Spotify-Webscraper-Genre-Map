@@ -1,0 +1,13 @@
+{
+          "type": "FeatureCollection",
+          "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+          "features": [
+          { "properties": {  "mag": 1000, "time":1451070887190 }, "geometry": { "type": "Point", "coordinates": [ -151.5129, 63.1016, 0.0 ] } },
+
+          { "properties": {  "mag": 1 , "time": 1450986243130}, "geometry": { "type": "Point", "coordinates": [ -151.5129, 23.1016, 0.0 ] } },
+
+          { "properties": {  "mag": 3 , "time": 1580450597361}, "geometry": { "type": "Point", "coordinates": [ -23.5129, 0.1016, 0.0 ] } },
+
+          { "properties": {  "mag": 5 , "time": 1450491053360}, "geometry": { "type": "Point", "coordinates": [ -13.5129, 0.1016, 0.0 ] } },
+          ]
+          }
