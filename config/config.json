@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "",
+    "password": "TR!nity9812",
     "database": "spotify_db",
     "host": "127.0.0.1",
     "dialect": "mysql",
