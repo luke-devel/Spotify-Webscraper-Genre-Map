@@ -1,24 +1,24 @@
-module.exports = function(sequelize,DataTypes){
-    const Model = sequelize.define('location', {
-        id: {type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-            },
-        country: {type: DataTypes.STRING, 
+module.exports = function (sequelize, DataTypes) {
+    const Model = sequelize.define('city', {
+        country: {
+            type: DataTypes.STRING,
             allowNull: false
-            },
-        region: {type: DataTypes.STRING,
-            defaultValue: false
-            },
-        city: {type: DataTypes.STRING, 
+        },
+        region: {
+            type: DataTypes.STRING,
+        },
+        city: {
+            type: DataTypes.STRING,
             allowNull: false
-            },
-        lat: {type: DataTypes.DECIMAL, 
-            allowNull: false
-            },
-        lon: {type: DataTypes.DECIMAL,
-            allowNull: false
-            }
-    },{timestamps: false});
+        },
+        lat: {
+            type: DataTypes.DECIMAL,
+            allowNull: true
+        },
+        lon: {
+            type: DataTypes.DECIMAL,
+            allowNull: true
+        }
+    });
     return Model
 }
