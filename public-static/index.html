@@ -21,16 +21,15 @@
     <link href="https://fonts.googleapis.com/css?family=Cabin|Heebo|Noto+Serif+SC&display=swap" rel="stylesheet">
     <!-- Compiled and minified Materialize CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!--This is the installantion CDN link and script for Select2-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <!-- Compiled and minified Materialize JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
           <!--MATERIALIZE JS-->  
 
-
-    <!--THIS IS THE PROBLEMATIC CUSTOM CSS -->
-    <!--THIS FILE IS GENERATING THE MIME ERROR, SO I'VE COMMENTED IT OUT-->
-    <!-- <link rel="stylesheet" type="text/css" href="styles.css"></link>
-   -->
     <!--MAPBOX HEAD SCRIPT-->
+    <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
 
@@ -38,7 +37,6 @@
 /*
     ==============================================================
      THIS STYLE CODE IS PLACING MAPBOX IN THE DIV id="map"
- 
     ==============================================================
 */
 -->
@@ -74,83 +72,75 @@ h4 {
 p {
     font-family: 'Noto Serif SC', serif;
 }
-  </style>
-  </head>
 
+.map-overlay {
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        position: absolute;
+        width: 25%;
+        top: 200px;
+        left: 0;
+        padding: 10px;
+    }
 
-  <body>
-  
+    .map-overlay .map-overlay-inner {
+        background-color: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
 
+    .map-overlay h2 {
+        line-height: 24px;
+        display: block;
+        margin: 0 0 10px;
+    }
 
+    .map-overlay .legend .bar {
+        height: 10px;
+        width: 100%;
+        background: linear-gradient(to right, #fca107, #7f3121);
+    }
+
+    .map-overlay input {
+        background-color: transparent;
+        display: inline-block;
+        width: 100%;
+        position: relative;
+        margin: 0;
+        cursor: ew-resize;
+    }
+
+    #sliderHead{
+      font-size: 1.4rem;
+    }
+
+    </style>
+    </head>
 
 <!--
   ================================================================
     TOP ROW HORIZONTAL NAVBAR
   ================================================================
 --> 
+<body>
     <div class="w3-bar w3-black w3-xlarge">
       <a class="foo-button mdc-button w3-bar-item w3-button" href="#"><i class="fa fa-bars"></i></a>
       <span class="w3-bar-item"><h3>Spotify Weather Map</h3></span>  
     </div>
 
-<!--
-  ================================================================
-    CURRENTLY TRACKING ROW (insert heatmap color code here)
-  ================================================================
--->
-    <div p class="w3-green accent-3 w3-hover-white w3-text-black w3-bar" style="height:4rem">
-     
-<!--
-  ================================================================
-    SEARCH BY ARTIST BUTTON
-  ================================================================
--->
-      <!--THIS IS THE SEARCH BY ARTIST BUTTON-->
-      <a href="#" class="btn dropdown-trigger btn button w3-bar-item w3-button w3-green accent-3 w3-hover-black" data-target = "dropdownArtist" data-activates="dropdownArtist" style="height:4rem;"><h4>Search by Artist</h4><i class="fa fa-search"></i></a>
+        <form class="form-control select black">
+          <div class="input-field col s12">  
+          <select id="genre_name genre-input" class="form-control js-example-data-ajax form-control select12-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true" multiple="multiple" name=>
+            <span class="select12 select12-container select12-container--default select12-container--below select12-container--open" dir="ltr" data-select2-id="2" style="width: 782px;"><span class="selection"><span class="select12-selection select12-selection--single" role="combobox" aria-haspopup="true" aria-expanded="true" tabindex="0" aria-disabled="false" aria-labelledby="select12-gsz0-container" aria-owns="select12-gsz0-results"><span class="select12-selection__rendered" id="select12-gsz0-container" role="textbox" aria-readonly="true"><span class="select12-selection__placeholder">Search for a Genre</span></span><span class="select12-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+            
+          
+          </select>
+        </div>
+      </form>
        
-      <div id = "dropdownArtist" class = "dropdown-content w3-text-black " style="z-index: 2;">
-          <h4 class="form-control" id="artist-input">
-            <div class="row">
-              <form class="col s12">
-                <div class="row">
-                  <div class="input-field col s12">
-                    <input placeholder="Enter here" id="artist_name" type="text" class="w3-text-black validate">
-                    <label for="first_name">Artist's Name</label>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <button id="artist-submit" class="foo-button mdc-button w3-button w3-green">Submit!</button>
-          </h4>
-        </div>
-
-<!--
-  ================================================================
-    SEARCH BY GENRE BUTTON
-  ================================================================
--->
-        <!--THIS IS THE SEARCH BY GENRE BUTTON-->
-        <a href="#" class="btn dropdown-trigger btn button w3-bar-item w3-button w3-green accent-3 w3-hover-black" data-target = "dropdownGenre" data-activates = "dropdownGenre" style="height:4rem;"><h4>Search by Genre</h4><i class="fa fa-search"></i></a>
+  </div>
  
-        <div id = "dropdownGenre" class = "dropdown-content w3-text-black " style="z-index: 2;">
-          <h4 class="form-control" id="genre-input">
-            <div class="row">
-              <form class="col s12">
-                <div class="row">
-                  <div class="input-field col s12">
-                    <input placeholder="Enter here" id="artist_name" type="text" class="w3-text-black validate">
-                    <label for="first_name">Genre Name</label>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <button id="genre-submit" class="foo-button mdc-button w3-button w3-green">Submit!</button>
-          </h4>
-        </div>
-        <span class="w3-bar-item"><h4>Currently Tracking: </h4></span> 
-   </div>
-
-
 <!--
   ================================================================
     THIS IS THE ACTUAL MAP
@@ -165,168 +155,33 @@ p {
   ================================================================
 -->
   <div class="row w3-black">
-    <div class="col s3 w3-black" id="mapInfoDiv">
+    <div class="col s3 w3-black" id="mapInfoDiv" style="overflow:auto">
      THIS IS AN AREA WHERE THE MORE COMPLEX LOGIC OF GENRE CHOICE CAN BE WORKED OUT (checkboxes?)
     </div>
   </div>  
 
 
+  <div class="map-overlay top">
+      <div class="map-overlay-inner">
+          <h2 id="sliderHead">The Year In Music</h2>
+          <label id="month"></label>
+          <input id="slider" type="range" min="0" max="11" step="1" value="0" />
+      </div>
+  </div>
 
  
-  <!--
-  ================================================================
-    SCRIPT TAGS BEGIN (THESE SHOULD BE BROKEN INTO LINKED JS FILES 
-    AS MUCH AS POSSIBLE, BUT I'LL WAIT TO SIMPLIFY THIS BRANCH)
 
-    THE FIRST SCRIPT TAG IS A MAPBOX ACCESS TOKEN AND A LINK TO
-    THE BASIC MAP I RENDERED IN MAPBOX STUDIO... THE HEATMAP WILL
-    BE LAYERED ON TOP OF THIS THROUGH API CALLS THAT INSTRUCT MAPBOX
-    STUDIO TO TAKE IN DATA AND TO RENDER COLORS, SHAPES, & LOCATIONS  
-  ================================================================
--->
-   <script>
-   mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGhld2ZyZWlsbHkiLCJhIjoiY2s1dW9mYmR1MWJ0cjNtb25lY240N3oxYyJ9.oUoPX11hY_Rz6ausgTENyw';
-   var map = new mapboxgl.Map({
-   container: 'map',
-   style: 'mapbox://styles/matthewfreilly/ck6136quy01761iml3gu9dvp3/draft'
-   });
+<script src="/Users/matthewreilly/Desktop/Development/project-2-spotify/public-static/js/vendor/mapbox.js"></script>
+<script src="./js/vendor/select2.js"></script>
+<script src="./js/vendor/mapbox.js"></script>
 
-   map.on('load', function () {
-      // Add a new source from our GeoJSON data and set the
-      // 'cluster' option to true. GL-JS will add the point_count property to your source data.
-      map.addSource('earthquakes', {
-        type: 'geojson',
-        // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
-        // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
-        data:
-        {
-"type": "FeatureCollection",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "properties": {  "mag": 1000 }, "geometry": { "type": "Point", "coordinates": [ -151.5129, 63.1016, 0.0 ] } },
-{ "properties": {  "mag": 1 }, "geometry": { "type": "Point", "coordinates": [ -151.5129, 23.1016, 0.0 ] } },
-{ "properties": {  "mag": 3 }, "geometry": { "type": "Point", "coordinates": [ -23.5129, 0.1016, 0.0 ] } },
-{ "properties": {  "mag": 5 }, "geometry": { "type": "Point", "coordinates": [ -13.5129, 0.1016, 0.0 ] } },
-]
-}
-,
-        cluster: true,
-        clusterMaxZoom: 14, // Max zoom to cluster points on
-        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
-      });
-
-      map.addLayer({
-        id: 'clusters',
-        type: 'circle',
-        source: 'earthquakes',
-        filter: ['has', 'point_count'],
-        paint: {
-          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-          // with three steps to implement three types of circles:
-          //   * Blue, 20px circles when point count is less than 100
-          //   * Yellow, 30px circles when point count is between 100 and 750
-          //   * Pink, 40px circles when point count is greater than or equal to 750
-          'circle-color': [
-            'step',
-            ['get', 'point_count'],
-            '#51bbd6',
-            100,
-            '#f1f075',
-            750,
-            '#f28cb1'
-          ],
-          'circle-radius': [
-            'step',
-            ['get', 'point_count'],
-            20,
-            100,
-            30,
-            750,
-            40
-          ]
-        }
-      });
-
-      map.addLayer({
-        id: 'cluster-count',
-        type: 'symbol',
-        source: 'earthquakes',
-        filter: ['has', 'point_count'],
-        layout: {
-          'text-field': '{point_count_abbreviated}',
-          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-          'text-size': 12
-        }
-      });
-
-      map.addLayer({
-        id: 'unclustered-point',
-        type: 'circle',
-        source: 'earthquakes',
-        filter: ['!', ['has', 'point_count']],
-        paint: {
-          'circle-color': '#11b4da',
-          'circle-radius': 4,
-          'circle-stroke-width': 1,
-          'circle-stroke-color': '#fff'
-        }
-      });
-
-      // inspect a cluster on click
-      map.on('click', 'clusters', function (e) {
-        var features = map.queryRenderedFeatures(e.point, {
-          layers: ['clusters']
-        });
-        var clusterId = features[0].properties.cluster_id;
-        map.getSource('earthquakes').getClusterExpansionZoom(
-          clusterId,
-          function (err, zoom) {
-            if (err) return;
-
-            map.easeTo({
-              center: features[0].geometry.coordinates,
-              zoom: zoom
-            });
-          }
-        );
-      });
-
-      map.on('mouseenter', 'clusters', function () {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', 'clusters', function () {
-        map.getCanvas().style.cursor = '';
-      });
-    });
-  </script>
-
-   </script>
-
-<!--
-  ================================================================
-   THIS IS THE JQUERY THAT INITIALIZES THE DROPDOWNS
-   IT SHOULD PROBABLY BE BROKEN OFF INTO A FILE THAT 
-   CONTAINS THE CLIENT/USER's INPUT (either artist or 
-   genre for now... I'm saving the fun choices here!!! 
-   & keeping all options on the table)
-  ================================================================
--->
-
-
-
-
-<script src="../controllers/oauth.js"></script>
+<!-- <script src="../controllers/oauth.js"></script> -->
 <script>
-  $('.dropdown-trigger').dropdown();
-  $("#artist-submit").on("click", function (event){ 
-    console.log($("#artist-input").val());})
   $("#genre-submit").on("click", function (event){ 
-    console.log($("#genre-input").val());})
+    console.log($("#genre-input").val());
+  });
 </script>
 
-
-
-
-  </body>
+</body>
 </html>
 
