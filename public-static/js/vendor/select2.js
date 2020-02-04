@@ -1,6 +1,10 @@
 
 $(document).ready(function() {
   $("currentlyTracking").hide(); 
+  // THE VARIABLE BELOW IS THE INTEGER ID# of USER'S CHOSEN GENRE
+  var userSelectedGenre;
+  var genreID; 
+  
   $(".js-example-data-ajax").select2({
     ajax: {
       url: "api/genres",
@@ -20,40 +24,37 @@ $(document).ready(function() {
         // var genreList = [];
         var id;
 
-$(".select2-search__field").keydown(function autoFill() {
+    $(".select2-search__field").keydown(function autoFill() {
 
-    $("#mapInfoDiv").empty();
-
-        for (id=1; id < data.results.length - 1; id++){
+      $("#mapInfoDiv").empty();
+      var loopStop = 0;
+        for (id=0; id < data.results.length; id++){
          
           // genreList.push(data.results[id].text);
           // const indexOfFirst = (data.results[id].text).indexOf(params.term);
-        if(params.term.length >= 3 && ((data.results[id].text).match(params.term))){
+ 
+          if((params.term.length >= 3) && ((data.results[id].text).match(params.term))){
           $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id}> <option>${data.results[id].text}</option></a>`);
-          $(".chosenGenre").on("click", function(){
-          console.log(this.id)
+          $(".chosenGenre").on("click", function(userSelectedGenre, genreID){
+           if (loopStop === 0){
+          genreID = this.id;
+          console.log(genreID);
+          console.log(this.text);
           $("#currentlyTracking").show();
           $("#trackingGenre").html("currently tracking: " + this.text)
-          })
-      
-          // $("#mapInfoDiv").append(`<option>${data.results[id].text}</option>`);
-    
-        }
-        // if (
-            // console.log(data.results[id].text.split('=')[1]); 
-          $(".js-example-matcher").select2({
-            matcher: autoFill,
-            tags: false,
-
-            
-          });           
-    }}
-)
-        // parse the results into the format expected by Select2
-        // since we are using custom formatting functions we do not need to
-        // alter the remote JSON data, except to indicate that infinite
-        // scrolling can be used
-        params.page = params.page || 1;
+          userSelectedGenre = this.text;
+          loopStop++;
+            return userSelectedGenre;
+           }    
+        });
+      };
+    };
+  });
+                // parse the results into the format expected by Select2
+                // since we are using custom formatting functions we do not need to
+                // alter the remote JSON data, except to indicate that infinite
+                // scrolling can be used
+          params.page = params.page || 1;
   
         return {
           results: data.results,
@@ -64,20 +65,18 @@ $(".select2-search__field").keydown(function autoFill() {
         };
       },
       cache: true
-      
+    
     },
-    placeholder: 'Search for a Genre',
+    placeholder: 'Click Spacebar to Search',
     minimumInputLength: 1,
     templateResult: formatResults,
     templateSelection: formatResultsSelection,
    
-  
   });
+  
   // This are left over from documentation /setup... 
-  // They are currently blocking the dropdown menu for selections, and
-  // this is fine because I haven't configured that yet. I do like the
-  // autopost to sidediv, so the exact presentation of these query
-  // autofills is yet to be determined...
+  // These functions are currently blocking the dropdown menu for selections, and
+  // this is probably preferable. 
   function formatResults (repo) {
     if (repo.loading) {
       // return repo.text;
