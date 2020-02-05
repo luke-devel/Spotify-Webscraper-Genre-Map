@@ -8,15 +8,15 @@ $(document).ready(function () {
 
   $(".js-example-data-ajax").select2({
     ajax: {
-      url: "api/genres",
+      url: "api/genre",
       dataType: 'json',
       delay: 250,
       AccessControlAllowOrigin: 'http://localhost:8080',
-      data: function (params) {
-        return {
-          q: params.term, // search term
-        };
-      },
+      // data: function (params) {
+      //   return {
+      //     q: params.term, // search term
+      //   };
+      // },
       processResults: function (data, params) {
         //this logs params in console
         // console.log(params);
@@ -27,16 +27,17 @@ $(document).ready(function () {
         $(".select2-search__field").keydown(function autoFill() {
 
           $("#mapInfoDiv").empty();
+
+          console.log(data)
+          console.log(data.results)
+
           var loopStop = 0;
-          for (id = 0; id < data.results.length; id++) {
+          for (id = 0; id < data.length; id++) {
 
             // genreList.push(data.results[id].text);
             // const indexOfFirst = (data.results[id].text).indexOf(params.term);
 
-            if ((params.term.length >= 3) && ((data.results[id].text).match(params.term))) {
-              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} onclick=addDataPoints() data-name="${data.results[id].text}"> <option>${data.results[id].text}</option></a>`);
-
-            };
+            $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${data[id].name}"> <option>${data[id].name}</option></a>`);
           };
         });
         // parse the results into the format expected by Select2
@@ -46,7 +47,7 @@ $(document).ready(function () {
         params.page = params.page || 1;
 
         return {
-          results: data.results,
+          results: data,
           pagination: {
             more: (params.page * 30) < data.total_count,
           }
@@ -87,30 +88,88 @@ $.fn.select2.defaults.set('amdLanguageBase', 'select2/i18n/');
 $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGenre, genreID) {
   $("#currentlyTracking").show();
   $("#trackingGenre").html("currently mapping: " + this.text)
-  addDataPoints();
   genreID = this.id;
   userSelectedGenre = this.text;
   console.log(genreID);
   console.log(userSelectedGenre);
+  $.get('/api/genre/' + this.text.trim()).then(data => {
+    console.log(data);
 
-
-  map.addSource('some id',  {
-    type: 'geojson',
-    data: {
-        "type": "FeatureCollection",
-        "features": [{
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    -76.53063297271729,
-                    39.18174077994108
-                ]
-            }
-        }]
+    try {
+      map.removeSource('earthquakes')
+    } catch(e){
+      console.log(e)
     }
- });
+ 
+    map.addSource('earthquakes', {
+      type: 'geojson',
+      // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+      // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+      data: data,
+      cluster: true,
+      clusterMaxZoom: 14, // Max zoom to cluster points on
+      clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+    });
+
+    map.addLayer({
+      id: 'clusters',
+      type: 'circle',
+      source: 'earthquakes',
+      filter: ['has', 'point_count'],
+      paint: {
+        // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+        // with three steps to implement three types of circles:
+        //   * Blue, 20px circles when point count is less than 100
+        //   * Yellow, 30px circles when point count is between 100 and 750
+        //   * Pink, 40px circles when point count is greater than or equal to 750
+        'circle-color': [
+          'step',
+          ['get', 'point_count'],
+          '#51bbd6',
+          100,
+          '#f1f075',
+          750,
+          '#f28cb1'
+        ],
+        'circle-radius': [
+          'step',
+          ['get', 'point_count'],
+          20,
+          100,
+          30,
+          750,
+          40
+        ]
+      }
+    });
+
+    map.addLayer({
+      id: 'cluster-count',
+      type: 'symbol',
+      source: 'earthquakes',
+      filter: ['has', 'point_count'],
+      layout: {
+        'text-field': '{point_count_abbreviated}',
+        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': 12
+      }
+    });
+
+    map.addLayer({
+      id: 'unclustered-point',
+      type: 'circle',
+      source: 'earthquakes',
+      filter: ['!', ['has', 'point_count']],
+      paint: {
+        'circle-color': '#11b4da',
+        'circle-radius': 4,
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#fff'
+      }
+    });
+  })
+
+ 
 
 
 });
