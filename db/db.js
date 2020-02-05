@@ -2,7 +2,6 @@ const db = require('../models');
 
 
 async function searchGenre(name){
-    await db.sequelize.sync();
     let data = await db.genre.findOne({
         where: {
             name: name
@@ -17,7 +16,7 @@ async function searchGenre(name){
 }
 
 
+
 module.exports = {
     searchGenre:searchGenre
-    
 }
