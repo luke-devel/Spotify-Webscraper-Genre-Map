@@ -1,11 +1,10 @@
-
-   mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGhld2ZyZWlsbHkiLCJhIjoiY2s1dW9mYmR1MWJ0cjNtb25lY240N3oxYyJ9.oUoPX11hY_Rz6ausgTENyw';
+mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGhld2ZyZWlsbHkiLCJhIjoiY2s1dW9mYmR1MWJ0cjNtb25lY240N3oxYyJ9.oUoPX11hY_Rz6ausgTENyw';
    var map = new mapboxgl.Map({
    container: 'map',
    center:[70,-10],
    zoom: 1,
-   
-   style: 'mapbox://styles/matthewfreilly/ck6136quy01761iml3gu9dvp3/draft'
+
+   style: 'mapbox://styles/matthewfreilly/ck68c8h6h08s61jpk4gnavuw6'
    });
 
    var months = [
@@ -27,11 +26,17 @@ function filterBy(month) {
     console.log("filtering by month" + month);
 
     var filters = ['==', 'month', month];
-    map.setFilter('unclustered-point', filters);
+    // map.setFilter('unclustered-point', filters);
     map.setFilter('cluster-count', filters);
     map.setFilter('clusters', filters);
     
     // Set the label to the month
+    
+    document.getElementById('month').style.color = "#030303";
+    // document.getElementById('month').style.paddingLeft = ".5rem";
+    
+    document.getElementById('month').style.fontSize = "1.2rem";
+    document.getElementById('month').style.fontFamily = "font-family: 'Cabin', sans-serif;";
     document.getElementById('month').textContent = months[month];
 }
 
@@ -46,12 +51,16 @@ var data = {
        "features": [
        { "properties": {  "point_count": 1000, "time":1451070887190}, "geometry": { "type": "Point", "coordinates": [ -151.5129, 63.1016, 0.0 ] } },
 
-       { "properties": {  "point_count": 1, "time": 1380450597361}, "geometry": { "type": "Point", "coordinates": [ -151.5129, 23.1016, 0.0 ] } },
+       { "properties": {  "point_count": 300, "time": 1380450597361}, "geometry": { "type": "Point", "coordinates": [ -151.5129, 23.1016, 0.0 ] } },
 
-       { "properties": {  "point_count": 3, "time":1552608000000}, "geometry": { "type": "Point", "coordinates": [ -23.5129, 0.1016, 0.0 ] } },
+       { "properties": {  "point_count": 600, "time":1552608000000}, "geometry": { "type": "Point", "coordinates": [ -23.5129, 0.1016, 0.0 ] } },
 
-       { "properties": {  "point_count": 5, "time":1450491053360}, "geometry": { "type": "Point", "coordinates": [ -13.5129, 0.1016, 0.0 ] } },
-       ]
+       { "properties": {  "point_count": 90, "time":1552608000000}, "geometry": { "type": "Point", "coordinates": [ -97, 33, 0.0 ] } },
+       { "properties": {  "point_count": 90, "time":1552608000000}, "geometry": { "type": "Point", "coordinates": [ -97, 33, 10.0  ] } },
+       { "properties": {  "point_count": 90, "time":1450491053360}, "geometry": { "type": "Point", "coordinates": [ -97, 33, 10.0  ] } },
+       { "properties": {  "point_count": 90, "time":1450491053360}, "geometry": { "type": "Point", "coordinates": [ -97, 33, 10.0  ] } },
+      
+      ]
        };
 
 data.features = data.features.map(function(d) {
@@ -64,11 +73,12 @@ console.log(data);
 //////////////////
   map.addSource('earthquakes', {
     type: 'geojson',
+    // I'm leaving in this comment from documentation... I believe this is where we
+    // will do things with our data queries (genre / listeners / co-ordinates /)
+    
     // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
     // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
-    data:data
-    
-,
+    data:data,
     cluster: true,
     clusterMaxZoom: 14, // Max zoom to cluster points on
     clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
@@ -88,11 +98,11 @@ console.log(data);
       'circle-color': [
         'step',
         ['get', 'point_count'],
-        '#51bbd6',
+        '#598B7C',
         100,
-        '#f1f075',
+        '#C4FA70',
         750,
-        '#f28cb1'
+        '#E52797'
       ],
       'circle-radius': [
         'step',
@@ -112,25 +122,24 @@ console.log(data);
     source: 'earthquakes',
     //filter: ['has', 'point_count'],
     layout: {
-      'text-field': '{point_count_abbreviated}',
+      'text-field': '{point_count}',
       'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': 12
+      'text-size': 18
     }
   });
 
-  map.addLayer({
-    id: 'unclustered-point',
-    type: 'circle',
-    source: 'earthquakes',
-    //filter: ['!', ['has', 'point_count']],
-    paint: {
-      'circle-color': '#11b4da',
-      'circle-radius': 4,
-      'circle-stroke-width': 1,
-      'circle-stroke-color': '#fff'
-    }
-  });
-
+  // map.addLayer({
+  //   id: 'unclustered-point',
+  //   type: 'circle',
+  //   source: 'earthquakes',
+  //   //filter: ['!', ['has', 'point_count']],
+  //   paint: {
+  //     // 'circle-color': '#11b4da',
+  //     // // 'circle-radius': 4,
+  //     // 'circle-stroke-width': 1,
+  //     // 'circle-stroke-color': '#fff'
+  //   }
+  // });
 
 
   filterBy(0);
@@ -139,15 +148,20 @@ console.log(data);
          var month = parseInt(e.target.value, 10);
          console.log(month);
          filterBy(month);
-     });
+     
 
-
-
-  // inspect a cluster on click
+     map.on('mouseenter', 'clusters', function () {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'clusters', function () {
+      map.getCanvas().style.cursor = '';
+    });
+//  inspect a cluster on click
   map.on('click', 'clusters', function (e) {
     var features = map.queryRenderedFeatures(e.point, {
       layers: ['clusters']
-    });
+  })
+});
     var clusterId = features[0].properties.cluster_id;
     map.getSource('earthquakes').getClusterExpansionZoom(
       clusterId,
@@ -161,13 +175,6 @@ console.log(data);
       }
     );
   });
-
-  map.on('mouseenter', 'clusters', function () {
-    map.getCanvas().style.cursor = 'pointer';
-  });
-  map.on('mouseleave', 'clusters', function () {
-    map.getCanvas().style.cursor = '';
-  });
 });
 
 
@@ -179,48 +186,33 @@ console.log(data);
         var clusterId = features[0].properties.cluster_id;
         console.log(features);
         
-        // Javascript click on point to display data point_count 
+        var longlat = features[0].geometry.coordinates;
+       
+        // var queryMapboxURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + longlat + ".json?access_token=pk.eyJ1IjoibWF0dGhld2ZyZWlsbHkiLCJhIjoiY2s1dW9mYmR1MWJ0cjNtb25lY240N3oxYyJ9.oUoPX11hY_Rz6ausgTENyw";
+
+        // Creating City and Cluster # jquery append here
+        var nodeCoordinates = document.createElement("li");
+        var textnodeCoordinates = document.createTextNode(longlat);
+            nodeCoordinates.appendChild(textnodeCoordinates);
+            document.getElementById("clickedCluster").appendChild(nodeCoordinates);
+
         var nodePointCount = document.createElement("li");
         var textnodePointCount = document.createTextNode(features[0].properties.point_count)
-        nodePointCount.appendChild(textnodePointCount);
-        document.getElementById("mapInfoDiv").appendChild(nodePointCount);
+            nodePointCount.appendChild(textnodePointCount);
+            document.getElementById("clickedCluster").appendChild(nodePointCount);
 
         // Javascript click on point to display city 
-     
-var longlat = features[0].geometry.coordinates;
-       
-var queryMapboxURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + longlat + ".json?access_token=pk.eyJ1IjoibWF0dGhld2ZyZWlsbHkiLCJhIjoiY2s1dW9mYmR1MWJ0cjNtb25lY240N3oxYyJ9.oUoPX11hY_Rz6ausgTENyw";
-
-
-// HERE IS WHERE I'LL NEED TO PICK UP!
-     console.log(queryMapboxURL);
-
-    var nodeCoordinates = document.createElement("li");
-    var textnodeCoordinates = document.createTextNode(textnodeCoordinates);
-        nodeCoordinates.appendChild(textnodeCoordinates);
-        document.getElementById("mapInfoDiv").appendChild(nodeCoordinates);
-      }) 
    
+      }) 
 
-        features[0].properties.point_count
-        map.getSource('earthquakes').getClusterExpansionZoom(
-          clusterId,
-          function (err, zoom) {
-            if (err) return;
-
-            map.easeTo({
-              center: features[0].geometry.coordinates,
-              zoom: 5
-            });
-          }
-        );
-     
-
-      // map.on('mouseenter', 'clusters', function () {
-      //   map.getCanvas().style.cursor = 'pointer';
-      // });
-      // map.on('mouseleave', 'clusters', function () {
-      //   map.getCanvas().style.cursor = '';
-      // });
+ 
 
 
+
+
+
+
+
+
+
+      
