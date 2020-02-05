@@ -7,12 +7,10 @@ FROM spotify_db.Spotifies;
 -- add lat long to cities table
 UPDATE cities a
         INNER JOIN
-    cityCoords ON cityCoords
-.city = a.city
+    cityCoords ON cityCoords.city = a.city
         AND cityCoords.country = a.country
 SET 
-    lat
-= latitude,
+    lat = latitude,
     lon = longitude
 
 --populates genres table
@@ -21,25 +19,25 @@ INSERT INTO genres
 SELECT DISTINCT artist_genres, now(), now()
 FROM Spotifies;
 
--- ???
-SELECT sum(listeners), city, artist_genres
-FROM Spotifies
-GROUP BY city, artist_genres;
-SELECT distinct artist_genres, city, listeners
-FROM Spotifies;
+-- -- adds listeners and groups by city/genre
+-- SELECT sum(listeners), city, artist_genres
+-- FROM Spotifies
+-- GROUP BY city, artist_genres;
+-- SELECT distinct artist_genres, city, listeners
+-- FROM Spotifies;
 
 -- ???
-SELECT
-    count, cities.id as cityId, now(), now()
-FROM
-    (SELECT sum(listeners) as count, city, country, artist_genres
-    FROM Spotifies
-    group by city, country, artist_genres) a
-    INNER JOIN
-    cities ON a.city = cities.city
-        AND a.country = cities.country;
+-- SELECT
+--     count, cities.id as cityId, now(), now()
+-- FROM
+--     (SELECT sum(listeners) as count, city, country, artist_genres
+--     FROM Spotifies
+--     group by city, country, artist_genres) a
+--     INNER JOIN
+--     cities ON a.city = cities.city
+--         AND a.country = cities.country;
 
--- populates listeners table
+-- -- populates listeners table
 INSERT INTO listeners
 	(count, cityId, genreId, createdAt, updatedAt)
 SELECT 
