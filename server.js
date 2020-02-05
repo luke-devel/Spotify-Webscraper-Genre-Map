@@ -39,7 +39,13 @@ app.get('/api/genres', function spotGenreList(request, response){
     
     });
 });
-
+// app.get('/api/genredata', function spotGenreDataGet(request, response){
+//     console.log("getting!");
+//     console.log(postValues)
+// });
+// app.post('/api/genredata', function spotGenreDataPost(request, response){
+// console.log("posting!");
+// });
 // Routes
 // =============================================================
 require("./controllers/spotify-controller.js")(app);
