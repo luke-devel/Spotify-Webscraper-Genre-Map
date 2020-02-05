@@ -9,38 +9,38 @@ var map = new mapboxgl.Map({
   style: 'mapbox://styles/matthewfreilly/ck68c8h6h08s61jpk4gnavuw6'
 });
 
-var months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-];
+  // var months = [
+  //   'January',
+  //   'February',
+  //   'March',
+  //   'April',
+  //   'May',
+  //   'June',
+  //   'July',
+  //   'August',
+  //   'September',
+  //   'October',
+  //   'November',
+  //   'December'
+  // ];
 
-function filterBy(month) {
-  console.log("filtering by month" + month);
+  // function filterBy(month) {
+  //   console.log("filtering by month" + month);
 
-  var filters = ['==', 'month', month];
-  // map.setFilter('unclustered-point', filters);
-  map.setFilter('cluster-count', filters);
-  map.setFilter('clusters', filters);
+  //   var filters = ['==', 'month', month];
+  //   // map.setFilter('unclustered-point', filters);
+  //   map.setFilter('cluster-count', filters);
+  //   map.setFilter('clusters', filters);
 
-  // Set the label to the month
+  //   // Set the label to the month
 
-  document.getElementById('month').style.color = "#030303";
-  // document.getElementById('month').style.paddingLeft = ".5rem";
+  //   document.getElementById('month').style.color = "#030303";
+  //   // document.getElementById('month').style.paddingLeft = ".5rem";
 
-  document.getElementById('month').style.fontSize = "1.2rem";
-  document.getElementById('month').style.fontFamily = "font-family: 'Cabin', sans-serif;";
-  document.getElementById('month').textContent = months[month];
-}
+  //   document.getElementById('month').style.fontSize = "1.2rem";
+  //   document.getElementById('month').style.fontFamily = "font-family: 'Cabin', sans-serif;";
+  //   document.getElementById('month').textContent = months[month];
+  // }
 
 map.on('load', function () {
   // Add a new source from our GeoJSON data and set the
@@ -58,25 +58,25 @@ map.on('load', function () {
 
   //////////////////
   
-  // map.addLayer({
-  //   id: 'unclustered-point',
-  //   type: 'circle',
-  //   source: 'earthquakes',
-  //   //filter: ['!', ['has', 'point_count']],
-  //   paint: {
-  //     // 'circle-color': '#11b4da',
-  //     // // 'circle-radius': 4,
-  //     // 'circle-stroke-width': 1,
-  //     // 'circle-stroke-color': '#fff'
-  //   }
-  // });
+  map.addLayer({
+    id: 'unclustered-point',
+    type: 'circle',
+    source: 'earthquakes',
+    //filter: ['!', ['has', 'point_count']],
+    paint: {
+      // 'circle-color': '#11b4da',
+      // // 'circle-radius': 4,
+      // 'circle-stroke-width': 1,
+      // 'circle-stroke-color': '#fff'
+    }
+  });
 
 
-  document.getElementById('slider')
-    .addEventListener('input', function (e) {
-      var month = parseInt(e.target.value, 10);
-      console.log(month);
-      filterBy(month);
+  // document.getElementById('slider')
+  //   .addEventListener('input', function (e) {
+  //     var month = parseInt(e.target.value, 10);
+  //     console.log(month);
+  //     filterBy(month);
 
 
       map.on('mouseenter', 'clusters', function () {
@@ -104,7 +104,7 @@ map.on('load', function () {
         }
       );
     });
-});
+
 
 
 // inspect a cluster on click

@@ -1,3 +1,4 @@
+import { stringify } from "querystring";
 
 $(document).ready(function () {
   $("currentlyTracking").hide();
@@ -18,52 +19,59 @@ $(document).ready(function () {
       //   };
       // },
       processResults: function (data, params) {
-        //this logs params in console
-        // console.log(params);
-        //this logs from url + /api/genres
-        // var genreList = [];
+ 
         var id;
 
         $(".select2-search__field").keydown(function autoFill() {
 
           $("#mapInfoDiv").empty();
 
-          console.log(data)
-          console.log(data.results)
-
-          var loopStop = 0;
+        console.log(data)
+          // console.log(data.results)
+         var inputText = $("input").val();
+         console.log(inputText);
+          // var loopStop = 0;
           for (id = 0; id < data.length; id++) {
+            console.log(inputText);
 
-            // genreList.push(data.results[id].text);
-            // const indexOfFirst = (data.results[id].text).indexOf(params.term);
-
-            $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${data[id].name}"> <option>${data[id].name}</option></a>`);
+//PICK UP HERE!!!!!
+            if (datatext.indexOf(inputText, 0) !== -1) {
+              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${data[id].name}"> <option>${data[id].name}</option></a>`);
+            } 
+              
+            
+            // $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${data[id].name}"> <option>${data[id].name}</option></a>`);
           };
         });
+       
         // parse the results into the format expected by Select2
         // since we are using custom formatting functions we do not need to
         // alter the remote JSON data, except to indicate that infinite
         // scrolling can be used
         params.page = params.page || 1;
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        console.log(params.page);
+        
 
         return {
           results: data,
           pagination: {
             more: (params.page * 30) < data.total_count,
-          }
-        };
-      },
-      cache: true
+              }
+            };
+          },
+          cache: true
 
-    },
-    placeholder: 'Search Genres',
+          },
+          placeholder: 'Search Genres',
 
-    minimumInputLength: 1,
-    templateResult: formatResults,
-    templateSelection: formatResultsSelection,
+          minimumInputLength: 1,
+          templateResult: formatResults,
+          templateSelection: formatResultsSelection,
 
-  });
+        });
 
+     
   // This are left over from documentation /setup... 
   // These functions are currently blocking the dropdown menu for selections, and
   // this is probably preferable. 
@@ -111,6 +119,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
     });
 
+    // THIS IS THE MAP FUNCTION TO WORK ON!!!
     map.addLayer({
       id: 'clusters',
       type: 'circle',
@@ -125,10 +134,10 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
         'circle-color': [
           'step',
           ['get', 'point_count'],
-          '#51bbd6',
-          100,
-          '#f1f075',
-          750,
+          '#E52797',
+          10,
+          '#C4FA70',
+          75,
           '#f28cb1'
         ],
         'circle-radius': [
