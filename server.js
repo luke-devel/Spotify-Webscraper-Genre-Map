@@ -1,4 +1,4 @@
-
+const fs = require('fs');
 
 // Server.js - This file is the initial starting point for the Node/Express server.
 // *********************************************************************************
@@ -16,14 +16,36 @@ var PORT  = process.env.PORT|| 8080;
 var app = express();
 
 
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Static directory
 app.use(express.static("./public-static"));
+app.use(express.static(__dirname + '/spotifyGenres.json'));
 
-// const mainLayoutView = require("./views/layouts/index.html");
-
+app.get('/api/genres', function spotGenreList(request, response){
+    var tempFile="./spotifyGenres.json";
+   
+    fs.readFile(tempFile, function (err,data){
+  
+       response.contentType("application/json");
+       response.send(data);
+       console.log(data);
+    
+        if (err) {
+       console.log(err);
+        }
+    
+    });
+});
+// app.get('/api/genredata', function spotGenreDataGet(request, response){
+//     console.log("getting!");
+//     console.log(postValues)
+// });
+// app.post('/api/genredata', function spotGenreDataPost(request, response){
+// console.log("posting!");
+// });
 // Routes
 // =============================================================
 require("./controllers/spotify-controller.js")(app);
