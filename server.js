@@ -20,7 +20,7 @@ app.use(express.json());
 
 // Static directory
 app.use(express.static("./public-static"));
-app.use(express.static(__dirname + '/spotifyGenres.json'));z
+app.use(express.static(__dirname + '/spotifyGenres.json'));
 
 // Routes
 // =============================================================
