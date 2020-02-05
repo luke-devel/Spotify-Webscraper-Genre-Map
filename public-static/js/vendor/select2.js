@@ -49,7 +49,6 @@ $(document).ready(function () {
           results: data.results,
           pagination: {
             more: (params.page * 30) < data.total_count,
-
           }
         };
       },
