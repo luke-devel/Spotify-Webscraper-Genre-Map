@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Spotify Weather Map</title>
+    <title>Spotify Genre Map</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--MATERIALIZE WEB COMPONENTS LINKS-->
@@ -14,7 +14,10 @@
     <!--MATERIALIZE CSS-->
     <link rel = "stylesheet"  
        href = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">  
-
+    <!--CUSTOM CSS-->
+    <link rel = "stylesheet"
+       type = "text/css"
+       href = "./css/styles.css" />
     <!--JQUERY-->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <!--GOOGLE FONTS-->
@@ -56,23 +59,7 @@
     ==============================================================
 */
 
-h1 { 
-    font-family: 'Heebo', sans-serif;
-}
-h2 {
-    font-family: 'Cabin', sans-serif;
-}
-h3 {
-    font-family: 'Heebo', sans-serif;
-    font-size: 2rem;
-}
-h4 {
-    font-family: 'Cabin', sans-serif;
-    font-size:1.5rem;
-}
-p {
-    font-family: 'Noto Serif SC', serif;
-}
+
 
 .map-overlay {
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -80,20 +67,23 @@ p {
         width: 25%;
         top: 200px;
         left: 0;
-        padding: 10px;
+        padding: 2px;
+        
     }
 
     .map-overlay .map-overlay-inner {
-        background-color: #fff;
+        background-color: #f6f6f6;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         border-radius: 3px;
         padding: 10px;
+        filter: opacity( 0.8);
         margin-bottom: 10px;
     }
 
     .map-overlay h2 {
         line-height: 24px;
         display: block;
+        
         margin: 0 0 10px;
     }
 
@@ -109,16 +99,19 @@ p {
         width: 100%;
         position: relative;
         margin: 0;
+       
         cursor: ew-resize;
+        
     }
 
-    #sliderHead{
-      font-size: 1.4rem;
-    }
+ 
 
     #searchGenre{
     float: right;
-    right: 10rem;
+    right: 3rem;
+    filter: opacity( 0.8);
+    filter: color(#FF8AE3);
+
     }
 
     #clickedCluster {
@@ -136,17 +129,17 @@ p {
 <body>
     
   <div class="w3-bar w3-black w3-xlarge">
-      <a class="foo-button mdc-button w3-bar-item w3-button" href="#"><i class="fa fa-bars"></i></a>
-      <span class="w3-bar-item"><h3>Spotify Weather Map</h3></span>  
+      <!-- <a class="foo-button mdc-button w3-bar-item w3-button" href="#"><i class="fa fa-bars"></i></a> -->
+      <span class="w3-bar-item"><h2>Spotify Genre Map</h2></span>  
     </div>
 
         <form class="row w3-black">
-          <div class="col s3" style="height:5rem;" id="currentlyTracking" ><h4 id="trackingGenre"></h4>
+          <div class="col s6" style="height:5rem;" id="currentlyTracking" ><h4 id="trackingGenre"></h4>
           </div>
-          <div class="input-field col s4" id="clickedCluster" style="overflow:auto; height:5rem;"> 
-          </div>
-          <div class="input-field col s4" id="searchGenre">  
-          <select id="genre_name genre-input" class="js-example-data-ajax" aria-hidden="true" multiple="true" name="">
+          <!-- <div class="input-field col s1" id="clickedCluster" style="overflow:auto; height:5rem;"> 
+          </div> -->
+          <div class="input-field col s5" id="searchGenre">  
+          <select id="genre_name genre-input" class="form-control js-example-data-ajax" aria-hidden="true" multiple="multiple" name="">
           
           
           </select>
@@ -170,16 +163,17 @@ p {
 -->
   <div class="row w3-black">
     <div class="col s3 w3-black" id="mapInfoDiv" style="overflow:auto">
-     THIS IS AN AREA WHERE THE MORE COMPLEX LOGIC OF GENRE CHOICE CAN BE WORKED OUT (checkboxes?)
+      <h4 id="instructions">Instructions:</h4>
+      <h5 id="instructionsBody">Spotify Genre Map tracks listener counts across Spotify's 3,800 genres. Enter a search term above to populate a list of genres. Then, click on the genre's name to create a cluster map of Spotify listeners.</h5>
     </div>
   </div>  
 
 
-  <div class="map-overlay top">
-      <div class="map-overlay-inner">
-          <h2 id="sliderHead">The Year In Music</h2>
-          <label id="month"></label>
-          <input id="slider" type="range" min="0" max="11" step="1" value="0" />
+  <div class="map-overlay top" style="top:26rem;">
+      <div class="map-overlay-inner" style="background-color: #A1C2D1; opacity: .9; border: .1rem solid #030303; border-radius:1rem;">
+          <h2 id="sliderHead">The Year In Music: </br><label id="month"></label id="month"></h2>
+          <!-- <h4 id="month"></h4> -->
+          <input  id="slider" type="range" min="0" max="11" step="1" value="0" />
       </div>
   </div>
 
