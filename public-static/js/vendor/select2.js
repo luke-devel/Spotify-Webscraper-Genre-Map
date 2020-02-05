@@ -16,7 +16,6 @@ $(document).ready(function () {
         return {
           q: params.term, // search term
         };
-
       },
       processResults: function (data, params) {
         //this logs params in console
@@ -35,7 +34,7 @@ $(document).ready(function () {
             // const indexOfFirst = (data.results[id].text).indexOf(params.term);
 
             if ((params.term.length >= 3) && ((data.results[id].text).match(params.term))) {
-              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} onclick=addDataPoints()> <option>${data.results[id].text}</option></a>`);
+              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} onclick=addDataPoints() data-name="${data.results[id].text}"> <option>${data.results[id].text}</option></a>`);
 
             };
           };
@@ -95,7 +94,8 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
   console.log(genreID);
   console.log(userSelectedGenre);
 
-  map.addSource('some id', {
+
+  map.addSource('some id',  {
     type: 'geojson',
     data: {
         "type": "FeatureCollection",
