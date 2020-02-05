@@ -15,14 +15,12 @@ var router = require('./controllers/controller')
 var PORT  = process.env.PORT|| 8080;
 var app = express();
 
-
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Static directory
 app.use(express.static("./public-static"));
-app.use(express.static(__dirname + '/spotifyGenres.json'));
+app.use(express.static(__dirname + '/spotifyGenres.json'));z
 
 // Routes
 // =============================================================
