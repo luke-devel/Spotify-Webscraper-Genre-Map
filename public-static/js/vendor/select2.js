@@ -22,7 +22,7 @@ $(document).ready(function () {
  
         var id;
 
-        $(".select2-search__field").keydown(function autoFill() {
+      $(".select2-search__field").keydown(function autoFill() {
 
           $("#mapInfoDiv").empty();
 
