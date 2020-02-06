@@ -60,34 +60,52 @@ async function insertrecord(scrapedata) {
 
         // First for loop runs # of times depending on length of Spotify Artist's genre tags
 
-        for (let j = 0; j < scrapedata.artist_genres.length; j++) {
 
-            // Second for loop runs # of times depending on length of Spotify cityData length
+        if (typeof scrapedata.cityData === "undefined" || typeof scrapedata.artist_genres === "undefined") {
 
-            for (let i = 0; i < scrapedata.cityData.length; i++) {
+            if (!Array.isArray(idsToDo) || !idsToDo.length) { // pre-populated id list array is empty
 
-                let record = {
-                    artist_ID: scrapedata.artist_ID,
-                    artist_name: scrapedata.artist_name,
-                    artist_genres: scrapedata.artist_genres[j],
-                    country: scrapedata.cityData[i].country,
-                    city: scrapedata.cityData[i].city,
-                    listeners: scrapedata.cityData[i].listeners
-                }
+                console.log(`idsToDo[] list is now empty. Scraping is now complete.`);
 
-                await db.Spotify.create(record)
-                    .then(function (results) {
-                        // `results` here would be the newly created table with unique artist and location information
-                        // res.json(results);
-                    });
+            }
+            else { // pre-populated id list array is not empty
+
+                console.log(`Artist genre or city data is "undefined", Moving to next id in idsToDo[] object. --> ${idsToDo[0]}`);
+                let nextID = idsToDo[0];
+                spotify(idsToDo[0], insertrecord);
+                idsToDo.shift();
+
             }
 
         }
+        else {
+            for (let j = 0; j < scrapedata.artist_genres.length; j++) {
 
-        findRelatedArtistID(scrapedata.relatedArtistIDs);
+                // Second for loop runs # of times depending on length of Spotify cityData length
+
+                for (let i = 0; i < scrapedata.cityData.length; i++) {
+
+                    let record = {
+                        artist_ID: scrapedata.artist_ID,
+                        artist_name: scrapedata.artist_name,
+                        artist_genres: scrapedata.artist_genres[j],
+                        country: scrapedata.cityData[i].country,
+                        city: scrapedata.cityData[i].city,
+                        listeners: scrapedata.cityData[i].listeners
+                    }
+
+                    await db.Spotify.create(record)
+                        .then(function (results) {
+                            // `results` here would be the newly created table with unique artist and location information
+                            // res.json(results);
+                        });
+                }
+            }
+            
+            findRelatedArtistID(scrapedata.relatedArtistIDs);
+
+        }
     }
-
-
 }
 
 
@@ -106,6 +124,8 @@ function findRelatedArtistID(relatedArtistIDs) {
             console.log(`New related Spotify artist id's in db`);
 
             console.log(relatedArtistIDs);
+
+            let match = false;
 
             let idsToCheck = relatedArtistIDs;
 
@@ -130,27 +150,27 @@ function findRelatedArtistID(relatedArtistIDs) {
             }
 
             // exit for loop
-            if (!Array.isArray(idsToCheck) || !idsToCheck.length) {
+            if (!Array.isArray(idsToCheck) || !idsToCheck.length) { // if idsToCheck is empty
 
-                if (!Array.isArray(idsToDo) || !idsToDo.length) {
+                if (!Array.isArray(idsToDo) || !idsToDo.length) { // pre-populated id list array is empty
 
                     console.log(`idsToDo[] list is now empty. Scraping is now complete.`);
 
                 }
+                else { // pre-populated id list array is not empty
 
-                else {
-                
                     console.log(`idsToCheck is empty. Moving to next id in idsToDo[] object. --> ${idsToDo[0]}`);
+                    let nextID = idsToDo[0];
                     spotify(idsToDo[0], insertrecord);
                     idsToDo.shift();
-                    
+
                 }
 
             }
-            else {
-
-                console.log(`remaining ids, choosing location 0: ${idsToCheck[0].id}`);
-                spotify(idsToCheck[0].id, insertrecord);
+            else { // if idsToCheck is not empty
+                let nextID = idsToCheck[0].id;
+                console.log(`remaining ids, choosing location 0: ${nextID}`);
+                spotify(nextID, insertrecord);
 
             }
 
