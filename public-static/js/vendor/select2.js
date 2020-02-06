@@ -99,6 +99,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
   if (map.getLayer('clusters')) map.removeLayer('clusters');
   if (map.getLayer('cluster-count')) map.removeLayer('cluster-count');
+  if (map.getLayer('unclustered-point')) map.removeLayer('unclustered-point');
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
@@ -108,6 +109,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
   userSelectedGenre = this.text;
   // console.log(genreID);
   // console.log(userSelectedGenre);
+  
   $.get('/api/genre/' + this.text.trim()).then(data => {
     // console.log(data);
 
@@ -124,8 +126,8 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
       data: data,
       cluster: true,
-      clusterMaxZoom: 14, // Max zoom to cluster points on
-      clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+      clusterMaxZoom: 18, // Max zoom to cluster points on
+      clusterRadius: 60 // Radius of each cluster when clustering points (defaults to 50)
     });
 
     // THIS IS THE MAP FUNCTION TO WORK ON!!!
@@ -134,7 +136,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       type: 'circle',
       source: 'earthquakes',
       filter: ['has', 'point_count'],
-      paint: {
+            paint: {
         // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
         // with three steps to implement three types of circles:
         //   * Blue, 20px circles when point count is less than 100
@@ -143,33 +145,97 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
         'circle-color': [
           'step',
           ['get', 'point_count'],
+          
+          '#C4FA70',
+          100,
+          // '#4A8C7B',
+          // 1000,
+          '#514EA3',
+          100000,
+          // '#4A8C7B',
+          // 500000,
+          '#4A8C7B',
+          1000000,
+          '#f28cb1',
+          5000000,
+          '#030303'
+        ],
+        'circle-radius': [
+          'step',
+          ['get', 'point_count'],
+  
+        
+          40,
+          100,
+          20,
+          1000,
+          20,
+          10000,
+          30,
+          100000,
+          10
+        ]
+      },
+    });
+
+    map.addLayer({
+      id: 'clusters',
+      type: 'symbol',
+      source: 'earthquakes',
+      filter: ['has', 'point_count'],
+              layout: {
+        'text-field': '{point_count_abbreviated}',
+        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': 14
+      }, 
+    });
+
+    map.addLayer({
+      id: 'unclustered-point',
+      type: 'circle',
+      source: 'earthquakes',
+      filter: [['has', 'point_count']],  
+      //    layout: {
+      //   'text-field': '{point_count_abbreviated}',
+      //   'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+      //   'text-size': 30
+      // },
+      
+      paint: {
+        'circle-color': [
+          'step',
+          ['get', 'point_count'],
+          
           '#4A8C7B',
           100,
           '#C4FA70',
           1000,
           '#f28cb1',
-          10000,
+          1000000,
           '#514EA3',
-          100000,
+          10000000,
           '#020202'
         ],
         'circle-radius': [
           'step',
           ['get', 'point_count'],
-          20,
-          100,
+  
+          25,
+          10,
           30,
-          1000,
+          100,
           40,
-          10000,
+          1000,
           50,
+          10000,
+          60,
           100000,
-          60
+          70
         ]
       }
     });
 
-    map.addLayer({
+   map.addLayer({
       id: 'cluster-count',
       type: 'symbol',
       source: 'earthquakes',
@@ -177,27 +243,45 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       layout: {
         'text-field': '{point_count_abbreviated}',
         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': 18
-      }
-    });
+        'text-size': 14
+      },
+      // 'circle-color': [
+      //   'step',
+      //   ['get', 'point_count'],
+        
+      //   '#4A8C7B',
+      //   100,
+      //   '#C4FA70',
+      //   1000,
+      //   '#f28cb1',
+      //   1000000,
+      //   '#514EA3',
+      //   10000000,
+      //   '#020202'
+      // ],
+      // 'circle-radius': [
+      //   'step',
+      //   ['get', 'point_count'],
 
-    // map.addLayer({
-    //   id: 'unclustered-point',
-    //   type: 'circle',
-    //   source: 'earthquakes',
-    //   filter: ['!', ['has', 'point_count']],  
-    //   //    layout: {
-    //   //   'text-field': '{point_count_abbreviated}',
-    //   //   'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-    //   //   'text-size': 18
-    //   // },
-    //   paint: {
-    //     'circle-color': '#11b4da',
-    //     'circle-radius': 400,
-    //     'circle-stroke-width': 1,
-    //     'circle-stroke-color': '#fff'
-    //   }
-    // });
+      //   5,
+      //   0,
+      //   10,
+      //   100,
+      //   15,
+      //   1000,
+      //   20,
+      //   10000,
+      //   25,
+      //   100000,
+      //   30
+      // ]
+    })
+
+    
+
+   
+  
+  
   })
 
  
