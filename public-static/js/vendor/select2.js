@@ -71,9 +71,7 @@ $(document).ready(function () {
           templateResult: formatResults,
           templateSelection: formatResultsSelection,
 
-        });
-
-     
+        });   
   // This are left over from documentation /setup... 
   // These functions are currently blocking the dropdown menu for selections, and
   // this is probably preferable. 
@@ -83,7 +81,6 @@ $(document).ready(function () {
     }
 
   }
-
   function formatResultsSelection(repo) {
     if (repo.loading) {
       // return repo.text;
@@ -97,6 +94,15 @@ $.fn.select2.defaults.set('amdLanguageBase', 'select2/i18n/');
 
 $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGenre, genreID) {
   $("#currentlyTracking").show();
+  
+  // / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
+  // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+  if (map.getLayer('clusters')) map.removeLayer('clusters');
+  if (map.getLayer('cluster-count')) map.removeLayer('cluster-count');
+  // / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
+  // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
+
+
   $("#trackingGenre").html("currently mapping: " + this.text)
   genreID = this.id;
   userSelectedGenre = this.text;
@@ -106,9 +112,10 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
     // console.log(data);
 
     try {
-      map.removeSource('earthquakes')
+      map.removeSource('earthquakes');
     } catch(e){
-      console.log(e)
+      console.log(e);
+      console.log("IN THE CATCH BLOCK");
     }
  
     map.addSource('earthquakes', {
@@ -174,26 +181,27 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       }
     });
 
-    map.addLayer({
-      id: 'unclustered-point',
-      type: 'circle',
-      source: 'earthquakes',
-      filter: ['!', ['has', 'point_count']],  
-      //    layout: {
-      //   'text-field': '{point_count_abbreviated}',
-      //   'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-      //   'text-size': 18
-      // },
-      paint: {
-        'circle-color': '#11b4da',
-        'circle-radius': 400,
-        'circle-stroke-width': 1,
-        'circle-stroke-color': '#fff'
-      }
-    });
+    // map.addLayer({
+    //   id: 'unclustered-point',
+    //   type: 'circle',
+    //   source: 'earthquakes',
+    //   filter: ['!', ['has', 'point_count']],  
+    //   //    layout: {
+    //   //   'text-field': '{point_count_abbreviated}',
+    //   //   'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+    //   //   'text-size': 18
+    //   // },
+    //   paint: {
+    //     'circle-color': '#11b4da',
+    //     'circle-radius': 400,
+    //     'circle-stroke-width': 1,
+    //     'circle-stroke-color': '#fff'
+    //   }
+    // });
   })
 
  
 
 
 });
+

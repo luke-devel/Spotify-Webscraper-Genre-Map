@@ -91,7 +91,8 @@ map.on('load', function () {
         var features = map.queryRenderedFeatures(e.point, {
           layers: ['clusters']
         })
-      });
+       
+     
       var clusterId = features[0].properties.cluster_id;
       map.getSource('earthquakes').getClusterExpansionZoom(
         clusterId,
@@ -102,6 +103,7 @@ map.on('load', function () {
             center: features[0].geometry.coordinates,
             zoom: zoom
           });
+        });
         }
       );
     });
