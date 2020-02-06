@@ -134,6 +134,7 @@ CUSTOM ITEMS (SPECIFIC CLASS AND ID STYLING)
 }
 #instructionsBody {
     padding-left: 1rem;
+    padding-right: 1rem,
     font-size: 1.3rem;
     font-family: 'Heebo', sans-serif;
     filter: opacity( 0.95);
