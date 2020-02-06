@@ -41,8 +41,6 @@ console.log(`
 
 spotify(initialArtistID, insertrecord);
 
-let newArtistID;
-
 async function insertrecord(scrapedata) {
 
     console.log(`Next Spotify Artist (id: ${scrapedata.artist_ID}) scrapedata:`);
@@ -153,7 +151,7 @@ function findRelatedArtistID(relatedArtistIDs) {
             else {
 
                 console.log(`remaining ids, choosing location 0: ${idsToCheck[0].id}`);
-                newArtistID = idsToCheck[0].id;
+                var newArtistID = idsToCheck[0].id;
                 spotify(newArtistID, insertrecord);
 
             }
