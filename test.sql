@@ -51,4 +51,23 @@ FROM
         INNER JOIN
     genres ON artist_genres = name
         INNER JOIN
-    cities ON cities.city = yonge.city and cities.country = yonge.country        
+    cities ON cities.city = yonge.city and cities.country = yonge.country   
+
+    --new statements 2/5 from cooper
+--this creates city coords table in SQL workbench
+         create table cityCoords(
+id integer  AUTO_INCREMENT,
+city varchar(50),
+country varchar (2),
+latitude float,
+longitude float,
+constraint cst_primarykey primary key (id));
+select * from citycoords;
+
+--joins two tables creating a final output of useable data for our view
+select a.artist_id,
+ a.artist_name, a.artist_genres, a.listeners, 
+ b.latitude, b.longitude from citycoords b, 
+ spotifies a where a.city = b.city and a.country = b.country;
+
+

@@ -8,7 +8,7 @@ const db = require("../models");
 const spotify = require("../cheerio-test/scrape.js");
 
 // Put your sql database password below
-const sequelize = new Sequelize('spotify_db', 'root', 'logmein1440', {
+const sequelize = new Sequelize('spotify_db', 'root', "8901alool", {
     host: 'localhost',
     dialect: 'mysql'
 });
@@ -51,10 +51,12 @@ async function insertrecord(scrapedata) {
             }
 
             await db.Spotify.create(record)
+
                 .then(function (results) {
                     // `results` here would be the newly created table with unique artist and location information
                     // res.json(results);
                 });
+            
         }
 
     }
