@@ -36,7 +36,7 @@ let idsToDo = [
 
 console.log(`
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        | « « |   Spotify Artist Auto Web Scraper - Using cheerio, sequelize, and node.js   | » » |
+        | « « |   Spotify Artist Auto Web Scraper - Using node.js, cheerio, and sequelize  | » » |
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);
 
 spotify(initialArtistID, insertrecord);
