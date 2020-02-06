@@ -101,7 +101,7 @@ async function insertrecord(scrapedata) {
                         });
                 }
             }
-            
+
             findRelatedArtistID(scrapedata.relatedArtistIDs);
 
         }
@@ -160,7 +160,7 @@ function findRelatedArtistID(relatedArtistIDs) {
                 else { // pre-populated id list array is not empty
 
                     console.log(`idsToCheck is empty. Moving to next id in idsToDo[] object. --> ${idsToDo[0]}`);
-                    let nextID = idsToDo[0];
+                    console.log(`idsToDo length: ${idsToDo.length}`);
                     spotify(idsToDo[0], insertrecord);
                     idsToDo.shift();
 
@@ -168,9 +168,19 @@ function findRelatedArtistID(relatedArtistIDs) {
 
             }
             else { // if idsToCheck is not empty
-                let nextID = idsToCheck[0].id;
-                console.log(`remaining ids, choosing location 0: ${nextID}`);
-                spotify(nextID, insertrecord);
+
+                if (!Array.isArray(idsToDo) || !idsToDo.length) { // pre-populated id list array is empty
+
+                    console.log(`idsToDo[] list is now empty. Scraping is now complete.`);
+
+                }
+                else { // pre-populated id list array is not empty
+
+                    console.log(`Id's remaining are non-duplicates, choosing location 0: ${idsToCheck[0].id}`);
+                    console.log(`idsToDo length: ${idsToDo.length}`);
+                    spotify(idsToCheck[0].id, insertrecord);
+
+                }
 
             }
 
