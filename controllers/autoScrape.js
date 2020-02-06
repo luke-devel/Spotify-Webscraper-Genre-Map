@@ -107,8 +107,6 @@ function findRelatedArtistID(relatedArtistIDs) {
 
             console.log(relatedArtistIDs);
 
-            let match = false;
-
             let idsToCheck = relatedArtistIDs;
 
             console.log(idsToCheck);
@@ -141,18 +139,18 @@ function findRelatedArtistID(relatedArtistIDs) {
                 }
 
                 else {
-                    var nextID = idsToDo[0];
-                    console.log(`idsToCheck is empty. Moving to next id in idsToDo[] object. --> ${nextID}`);
-                    spotify(nextID, insertrecord);
+                
+                    console.log(`idsToCheck is empty. Moving to next id in idsToDo[] object. --> ${idsToDo[0]}`);
+                    spotify(idsToDo[0], insertrecord);
                     idsToDo.shift();
+                    
                 }
 
             }
             else {
 
                 console.log(`remaining ids, choosing location 0: ${idsToCheck[0].id}`);
-                var newArtistID = idsToCheck[0].id;
-                spotify(newArtistID, insertrecord);
+                spotify(idsToCheck[0].id, insertrecord);
 
             }
 
