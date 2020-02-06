@@ -7,16 +7,32 @@ const { Sequelize } = require('sequelize');
 const db = require("../models");
 const spotify = require("../cheerio-test/scrape.js");
 
-// Put your sql database password below
-const sequelize = new Sequelize('spotify_db', 'root', "8901alool", {
+
+/////////////////////////////////////////////
+/// Put your sql database password below! ///
+/////////////////////////////////////////////
+
+const sequelize = new Sequelize('spotify_db', 'root', 'password', {
     host: 'localhost',
     dialect: 'mysql'
 });
 
 // Initial Spotify artist ID determined to begin the auto scraping with related artists
 
-let initialArtistID = '4x1nvY2FN8jxqAFA0DA02H'
+let initialArtistID = '3yY2gUcIsjMr8hjo51PoJ8'
 
+// Array idsToDo[] for every spotify artist id you wish to scrape
+// these will be used if a scraped artist has no genre tags
+// or if all related artists of a scraped artist are already in the database.
+// Important: the final location of the array should contain 'done', this location
+// will not be used as a scraped Spotify id.
+
+let idsToDo = [
+    '4MlLVFHiA4e7BU7vQ4r5Lh',
+    '0LZac5VicY19QLaIUvIB0G',
+    '2wOqMjp9TyABvtHdOSOTUS',
+    '1Mxqyy3pSjf8kZZL4QVxS0'
+]
 
 console.log(`
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,63 +45,81 @@ let newArtistID;
 
 async function insertrecord(scrapedata) {
 
-    // console.log(returnRelatedArtistID(scrapedata.relatedArtistIDs))
+    console.log(`Next Spotify Artist (id: ${scrapedata.artist_ID}) scrapedata:`);
 
-    // setTimeout(function () { console.log("Hello"); }, 1000);
+    // Checks if Spotify artist id is empty/undefined
 
-    // First for loop runs # of times depending on length of Spotify Artist's genre tags
+    if (!Array.isArray(scrapedata.artist_genres) || !scrapedata.artist_genres.length) {
+        console.log(`Spotify Artist (id: ${scrapedata.artist_ID}) artist_genres is empty. Moving to next id in idsToDo[] object. --> ${nextID}`);
+        var nextID = idsToDo[0];
+        spotify(nextID, insertrecord);
+        idsToDo.shift();
+    }
 
-    for (let j = 0; j < scrapedata.artist_genres.length; j++) {
+    // Will populate sql table if genres are defined
 
-        // Second for loop runs # of times depending on length of Spotify cityData length
+    else {
 
-        for (let i = 0; i < scrapedata.cityData.length; i++) {
+        // First for loop runs # of times depending on length of Spotify Artist's genre tags
 
-            let record = {
-                artist_ID: scrapedata.artist_ID,
-                artist_name: scrapedata.artist_name,
-                artist_genres: scrapedata.artist_genres[j],
-                country: scrapedata.cityData[i].country,
-                city: scrapedata.cityData[i].city,
-                listeners: scrapedata.cityData[i].listeners
+        for (let j = 0; j < scrapedata.artist_genres.length; j++) {
+
+            // Second for loop runs # of times depending on length of Spotify cityData length
+
+            for (let i = 0; i < scrapedata.cityData.length; i++) {
+
+                let record = {
+                    artist_ID: scrapedata.artist_ID,
+                    artist_name: scrapedata.artist_name,
+                    artist_genres: scrapedata.artist_genres[j],
+                    country: scrapedata.cityData[i].country,
+                    city: scrapedata.cityData[i].city,
+                    listeners: scrapedata.cityData[i].listeners
+                }
+
+                await db.Spotify.create(record)
+                    .then(function (results) {
+                        // `results` here would be the newly created table with unique artist and location information
+                        // res.json(results);
+                    });
             }
-
+          
             await db.Spotify.create(record)
-
                 .then(function (results) {
                     // `results` here would be the newly created table with unique artist and location information
                     // res.json(results);
                 });
-            
+          
         }
 
+        findRelatedArtistID(scrapedata.relatedArtistIDs);
     }
 
-    returnNextRelatedArtistID(scrapedata.relatedArtistIDs);
-    console.log(`new artist id= ${newArtistID}`);
+
 }
 
 
 
 // function to return related artist ID that has not a duplicate of current artist id's
-function returnNextRelatedArtistID(relatedArtistIDs) {
+function findRelatedArtistID(relatedArtistIDs) {
     // Querys the database to find all of the current artist id's we have scraped
     // will be used to avoid duplicates
     sequelize.query('SELECT distinct artist_ID FROM spotify_db.spotifies;', { type: sequelize.QueryTypes.SELECT })
         .then(function (currentArtistIDs) {
 
-            console.log(`current artist id's in db`);
+            console.log(`Current Spotify artist id's in db`);
 
             console.log(currentArtistIDs);
 
-            console.log(`related artist id's in db - always will be 4`);
+            console.log(`New related Spotify artist id's in db`);
 
             console.log(relatedArtistIDs);
 
-
             let match = false;
 
-            let nonDuplicate = 0;
+            let idsToCheck = relatedArtistIDs;
+
+            console.log(idsToCheck);
 
             for (let i = 0; i < currentArtistIDs.length; i++) { // runs n+1 times
 
@@ -94,45 +128,42 @@ function returnNextRelatedArtistID(relatedArtistIDs) {
                     // checks if dup
                     if (relatedArtistIDs[j].id === currentArtistIDs[i].artist_ID) {
 
-                        console.log(`there was a duplicate at current artist ${i}: ${currentArtistIDs[i].artist_ID} and related artist ${j} ${relatedArtistIDs[j].id}`);
+                        idsToCheck.splice(j, 1);
 
-                        match = true;
-
-                        if (nonDuplicate !== relatedArtistIDs.length) {
-                            nonDuplicate++;
-                        }
-
-                        console.log(`duplicate found at location ${j}, nonDup location now ${nonDuplicate}, artist id: ${relatedArtistIDs[j].id}`);
+                        console.log(`Remaining unused id's`);
+                        console.log(idsToCheck);
 
                     }
 
-
                 }
-
 
             }
 
             // exit for loop
-            if (nonDuplicate !== relatedArtistIDs.length) {
-                console.log(`final non dup location = ${nonDuplicate}, artist id to return: ${relatedArtistIDs[nonDuplicate].id}`);
-                newArtistID = relatedArtistIDs[nonDuplicate].id;
-                spotify(newArtistID, insertrecord);
+            if (!Array.isArray(idsToCheck) || !idsToCheck.length) {
+
+                if (!Array.isArray(idsToDo) || !idsToDo.length) {
+
+                    console.log(`idsToDo[] list is now empty. Scraping is now complete.`);
+
+                }
+
+                else {
+                    var nextID = idsToDo[0];
+                    console.log(`idsToCheck is empty. Moving to next id in idsToDo[] object. --> ${nextID}`);
+                    spotify(nextID, insertrecord);
+                    idsToDo.shift();
+                }
+
             }
             else {
-                console.log(`All related artist id's are duplicates. stopping.`);
+
+                console.log(`remaining ids, choosing location 0: ${idsToCheck[0].id}`);
+                newArtistID = idsToCheck[0].id;
+                spotify(newArtistID, insertrecord);
+
             }
+
         });
 
-
-    // let nextArtistID = 'RETURN - next id is: 0fgYKF9Avljex0L9Wt5b8Z';
-
-    // return nextArtistID;
 }
-
-function returnRelatedArtists(artist_ID) {
-    console.log(artist_ID);
-
-    return artist_ID;
-
-}
-
