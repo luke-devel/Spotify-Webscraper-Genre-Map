@@ -47,7 +47,7 @@ router.get('/', (req, res) => res.sendFile(path.join(__dirname, "../public-stati
 router.get('/api/genre/:genre',async function(req,res){
     getGenreListeners(req.params.genre).then(function(data){
         convertToGeo(data).then(function(geoData){
-            res.send(JSON.stringify(geoData))
+            res.json(geoData);
         })
     })
     .catch(function(err){

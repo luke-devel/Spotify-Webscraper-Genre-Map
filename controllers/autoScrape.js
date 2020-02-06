@@ -7,6 +7,7 @@ const { Sequelize } = require('sequelize');
 const db = require("../models");
 const spotify = require("../cheerio-test/scrape.js");
 
+
 /////////////////////////////////////////////
 /// Put your sql database password below! ///
 /////////////////////////////////////////////
@@ -82,7 +83,13 @@ async function insertrecord(scrapedata) {
                         // res.json(results);
                     });
             }
-
+          
+            await db.Spotify.create(record)
+                .then(function (results) {
+                    // `results` here would be the newly created table with unique artist and location information
+                    // res.json(results);
+                });
+          
         }
 
         findRelatedArtistID(scrapedata.relatedArtistIDs);

@@ -20,16 +20,14 @@ app.use(express.json());
 
 // Static directory
 app.use(express.static("./public-static"));
-app.use(express.static(__dirname + '/spotifyGenres.json'));
 
 // Routes
 // =============================================================
 app.use(router);
 
-
 // =============================================================
 //Syncs database 
-db.sequelize.sync({ }).then(function() {
+db.sequelize.sync({ force:true}).then(function() {
 
 // Starts the server to begin listening
     app.listen(PORT, function() {
