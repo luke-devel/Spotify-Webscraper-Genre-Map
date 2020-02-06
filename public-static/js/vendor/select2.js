@@ -186,7 +186,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       // },
       paint: {
         'circle-color': '#11b4da',
-        'circle-radius': 4,
+        'circle-radius': 400,
         'circle-stroke-width': 1,
         'circle-stroke-color': '#fff'
       }
