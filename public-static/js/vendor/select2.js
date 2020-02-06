@@ -1,4 +1,4 @@
-import { stringify } from "querystring";
+// import { stringify } from "querystring";
 
 $(document).ready(function () {
   $("currentlyTracking").hide();
@@ -35,13 +35,15 @@ $(document).ready(function () {
             console.log(inputText);
 
 //PICK UP HERE!!!!!
-            if (datatext.indexOf(inputText, 0) !== -1) {
+
+            if ( (data[id].name).match(inputText) ) {
               $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${data[id].name}"> <option>${data[id].name}</option></a>`);
             } 
+            else {
+              console.log("your input does not call up any genres");
+            }
               
-            
-            // $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${data[id].name}"> <option>${data[id].name}</option></a>`);
-          };
+         };
         });
        
         // parse the results into the format expected by Select2
@@ -98,10 +100,10 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
   $("#trackingGenre").html("currently mapping: " + this.text)
   genreID = this.id;
   userSelectedGenre = this.text;
-  console.log(genreID);
-  console.log(userSelectedGenre);
+  // console.log(genreID);
+  // console.log(userSelectedGenre);
   $.get('/api/genre/' + this.text.trim()).then(data => {
-    console.log(data);
+    // console.log(data);
 
     try {
       map.removeSource('earthquakes')
@@ -134,11 +136,15 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
         'circle-color': [
           'step',
           ['get', 'point_count'],
-          '#E52797',
-          10,
+          '#4A8C7B',
+          100,
           '#C4FA70',
-          75,
-          '#f28cb1'
+          1000,
+          '#f28cb1',
+          10000,
+          '#514EA3',
+          100000,
+          '#020202'
         ],
         'circle-radius': [
           'step',
@@ -146,8 +152,12 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
           20,
           100,
           30,
-          750,
-          40
+          1000,
+          40,
+          10000,
+          50,
+          100000,
+          60
         ]
       }
     });
@@ -160,7 +170,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       layout: {
         'text-field': '{point_count_abbreviated}',
         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': 12
+        'text-size': 18
       }
     });
 
@@ -168,10 +178,15 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       id: 'unclustered-point',
       type: 'circle',
       source: 'earthquakes',
-      filter: ['!', ['has', 'point_count']],
+      filter: ['!', ['has', 'point_count']],  
+      //    layout: {
+      //   'text-field': '{point_count_abbreviated}',
+      //   'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+      //   'text-size': 18
+      // },
       paint: {
         'circle-color': '#11b4da',
-        'circle-radius': 4,
+        'circle-radius': 400,
         'circle-stroke-width': 1,
         'circle-stroke-color': '#fff'
       }
