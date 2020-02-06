@@ -27,7 +27,7 @@ app.use(router);
 
 // =============================================================
 //Syncs database 
-db.sequelize.sync({ }).then(function() {
+db.sequelize.sync({ force:true}).then(function() {
 
 // Starts the server to begin listening
     app.listen(PORT, function() {

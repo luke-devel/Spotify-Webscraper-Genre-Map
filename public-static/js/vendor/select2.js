@@ -277,10 +277,6 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       // ]
     })
 
-    
-
-   
-  
   
   })
 
@@ -288,4 +284,3 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
 
 
 });
-
