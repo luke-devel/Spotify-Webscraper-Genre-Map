@@ -12,7 +12,7 @@ const spotify = require("../cheerio-test/scrape.js");
 /// Put your sql database password below! ///
 /////////////////////////////////////////////
 
-const sequelize = new Sequelize('spotify_db', 'root', 'password', {
+const sequelize = new Sequelize('spotify_db', 'root', '1440', {
     host: 'localhost',
     dialect: 'mysql'
 });
@@ -83,14 +83,10 @@ async function insertrecord(scrapedata) {
                         // res.json(results);
                     });
             }
-          
-            await db.Spotify.create(record)
-                .then(function (results) {
-                    // `results` here would be the newly created table with unique artist and location information
-                    // res.json(results);
-                });
-          
+
         }
+
+        // Calls findRelatedArtistID() function to scrape all data from the relatedArtistIDs of original artist
 
         findRelatedArtistID(scrapedata.relatedArtistIDs);
     }
