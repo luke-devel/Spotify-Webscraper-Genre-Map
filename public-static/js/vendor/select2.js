@@ -133,7 +133,10 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       data: data,
       cluster: true,
       clusterMaxZoom: 18, // Max zoom to cluster points on
-      clusterRadius: 2 // Radius of each cluster when clustering points (defaults to 50)
+      clusterRadius: 6, // Radius of each cluster when clustering points (defaults to 50)
+      // clusterProperties: { 
+      //   'point_count': ['+', ['case', point_count, 1, 0]]
+      //  }
     });
 
     map.addLayer({
@@ -157,7 +160,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
           '#514EA3',
           100000,
           '#C4FA70',
-          150000,
+          130000,
           '#4A8C7B',
           180000,
           '#f28cb1',
@@ -169,15 +172,15 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
           ['get', 'point_count'],
   
         
-          10,
+          1,
           1,
           15,
           20000,
-          20,
-          500000,
-          25,
-          1000000,
           30,
+          500000,
+          45,
+          1000000,
+          60,
          
         ]
       },
@@ -220,15 +223,15 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
           ['get', 'point_count'],
   
         
-          10,
-          1,
-          15,
-          20000,
-          20,
-          500000,
-          25,
-          1000000,
-          30,
+          // 10,
+          // 1,
+          // 15,
+          // 20000,
+          // 2000,
+          // 500000,
+          // 25,
+          // 1000000,
+          // 30,
          
         ]
       },
@@ -251,7 +254,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       'Open Sans Bold',
       'Arial Unicode MS Bold'
       ],
-      'text-size': 15
+      'text-size': 13
       },     
       'paint': {
       'text-color': '#f6f6f6'
