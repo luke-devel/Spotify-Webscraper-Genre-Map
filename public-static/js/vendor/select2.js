@@ -100,10 +100,16 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
   if (map.getLayer('clusters')) map.removeLayer('clusters');
   if (map.getLayer('cluster-count')) map.removeLayer('cluster-count');
   if (map.getLayer('unclustered-point')) map.removeLayer('unclustered-point');
+  if (map.getLayer('earthquake-labels')) map.removeLayer('earthquake-labels');
+
+  
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
 
+
+
+  
   $("#trackingGenre").html("currently mapping: " + this.text)
   genreID = this.id;
   userSelectedGenre = this.text;
@@ -127,16 +133,18 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       data: data,
       cluster: true,
       clusterMaxZoom: 18, // Max zoom to cluster points on
-      clusterRadius: 60 // Radius of each cluster when clustering points (defaults to 50)
+      clusterRadius: 2 // Radius of each cluster when clustering points (defaults to 50)
     });
 
-    // THIS IS THE MAP FUNCTION TO WORK ON!!!
     map.addLayer({
       id: 'clusters',
       type: 'circle',
       source: 'earthquakes',
+     
       filter: ['has', 'point_count'],
             paint: {
+              'circle-opacity': .6,
+
         // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
         // with three steps to implement three types of circles:
         //   * Blue, 20px circles when point count is less than 100
@@ -146,136 +154,209 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
           'step',
           ['get', 'point_count'],
           
-          '#C4FA70',
-          100,
-          // '#4A8C7B',
-          // 1000,
           '#514EA3',
           100000,
-          // '#4A8C7B',
-          // 500000,
+          '#C4FA70',
+          150000,
           '#4A8C7B',
-          1000000,
+          180000,
           '#f28cb1',
-          5000000,
-          '#030303'
+          300000,
+          '#E21C30',
         ],
         'circle-radius': [
           'step',
           ['get', 'point_count'],
   
         
-          40,
-          100,
+          10,
+          1,
+          15,
+          20000,
           20,
-          1000,
-          20,
-          10000,
+          500000,
+          25,
+          1000000,
           30,
-          100000,
-          10
+         
         ]
       },
+    
     });
-
+    
+    // THIS IS THE MAP FUNCTION TO WORK ON!!!
     map.addLayer({
       id: 'clusters',
-      type: 'symbol',
-      source: 'earthquakes',
-      filter: ['has', 'point_count'],
-              layout: {
-        'text-field': '{point_count_abbreviated}',
-        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': 14
-      }, 
-    });
-
-    map.addLayer({
-      id: 'unclustered-point',
       type: 'circle',
       source: 'earthquakes',
-      filter: [['has', 'point_count']],  
-      //    layout: {
-      //   'text-field': '{point_count_abbreviated}',
-      //   'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-      //   'text-size': 30
-      // },
-      
-      paint: {
+     
+      filter: ['has', 'point_count'],
+            paint: {
+              'circle-opacity': .4,
+
+        // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+        // with three steps to implement three types of circles:
+        //   * Blue, 20px circles when point count is less than 100
+        //   * Yellow, 30px circles when point count is between 100 and 750
+        //   * Pink, 40px circles when point count is greater than or equal to 750
         'circle-color': [
           'step',
           ['get', 'point_count'],
           
-          '#4A8C7B',
-          100,
-          '#C4FA70',
-          1000,
-          '#f28cb1',
-          1000000,
+          
+        
           '#514EA3',
-          10000000,
-          '#020202'
+          100000,
+          '#C4FA70',
+          400000,
+          '#4A8C7B',
+          600000,
+          '#f28cb1',
+          800000,
+          '#E21C30',
         ],
         'circle-radius': [
           'step',
           ['get', 'point_count'],
   
-          25,
+        
           10,
+          1,
+          15,
+          20000,
+          20,
+          500000,
+          25,
+          1000000,
           30,
-          100,
-          40,
-          1000,
-          50,
-          10000,
-          60,
-          100000,
-          70
+         
         ]
-      }
+      },
+      
     });
 
-   map.addLayer({
-      id: 'cluster-count',
-      type: 'symbol',
-      source: 'earthquakes',
-      filter: ['has', 'point_count'],
-      layout: {
-        'text-field': '{point_count_abbreviated}',
-        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': 14
-      },
-      // 'circle-color': [
-      //   'step',
-      //   ['get', 'point_count'],
-        
-      //   '#4A8C7B',
-      //   100,
-      //   '#C4FA70',
-      //   1000,
-      //   '#f28cb1',
-      //   1000000,
-      //   '#514EA3',
-      //   10000000,
-      //   '#020202'
-      // ],
-      // 'circle-radius': [
-      //   'step',
-      //   ['get', 'point_count'],
+    // THIS IS THE LAYER WITH TEXT TAGS THAT NEEDS TO UPDATE
+    map.addLayer({
+      'id': 'earthquake-labels',
+      'type': 'symbol',
+      
+      'source': 'earthquakes',
+      'layout': {
+      'text-field': [
+      'concat',
+      ['to-string', ['get', 'point_count']],
+      ''
+      ],
+      'text-font': [
+      'Open Sans Bold',
+      'Arial Unicode MS Bold'
+      ],
+      'text-size': 15
+      },     
+      'paint': {
+      'text-color': '#f6f6f6'
+      }
+      });
+   
 
-      //   5,
-      //   0,
-      //   10,
-      //   100,
-      //   15,
-      //   1000,
-      //   20,
-      //   10000,
-      //   25,
-      //   100000,
-      //   30
-      // ]
-    })
+    // map.addLayer({
+    //   id: 'clusters',
+    //   type: 'symbol',
+    //   source: 'earthquakes',
+    //   filter: ['has', 'point_count'],
+    //           layout: {
+    //     'text-field': '{point_count_abbreviated}',
+    //     'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+    //     'text-size': 14
+    //   }, 
+    // });
+
+    // map.addLayer({
+    //   id: 'unclustered-point',
+    //   type: 'circle',
+    //   source: 'earthquakes',
+    //   filter: [['has', 'point_count']],  
+    //   //    layout: {
+    //   //   'text-field': '{point_count_abbreviated}',
+    //   //   'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+    //   //   'text-size': 30
+    //   // },
+      
+    //   paint: {
+    //     'circle-color': [
+    //       'step',
+    //       ['get', 'point_count'],
+          
+    //       '#4A8C7B',
+    //       100,
+    //       '#C4FA70',
+    //       1000,
+    //       '#f28cb1',
+    //       1000000,
+    //       '#514EA3',
+    //       10000000,
+    //       '#020202'
+    //     ],
+    //     'circle-radius': [
+    //       'step',
+    //       ['get', 'point_count'],
+  
+    //       25,
+    //       10,
+    //       30,
+    //       100,
+    //       40,
+    //       1000,
+    //       50,
+    //       10000,
+    //       60,
+    //       100000,
+    //       70
+    //     ]
+    //   }
+    // });
+
+  //  map.addLayer({
+  //     id: 'cluster-count',
+  //     type: 'symbol',
+  //     source: 'earthquakes',
+  //     filter: ['has', 'point_count'],
+  //     layout: {
+  //       'text-field': '{point_count_abbreviated}',
+  //       'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+  //       'text-size': 14
+  //     },
+  //     // 'circle-color': [
+  //     //   'step',
+  //     //   ['get', 'point_count'],
+        
+  //     //   '#4A8C7B',
+  //     //   100,
+  //     //   '#C4FA70',
+  //     //   1000,
+  //     //   '#f28cb1',
+  //     //   1000000,
+  //     //   '#514EA3',
+  //     //   10000000,
+  //     //   '#020202'
+  //     // ],
+  //     // 'circle-radius': [
+  //     //   'step',
+  //     //   ['get', 'point_count'],
+
+  //     //   5,
+  //     //   0,
+  //     //   10,
+  //     //   100,
+  //     //   15,
+  //     //   1000,
+  //     //   20,
+  //     //   10000,
+  //     //   25,
+  //     //   100000,
+  //     //   30
+  //     // ]
+  //   })
 
   
   })
