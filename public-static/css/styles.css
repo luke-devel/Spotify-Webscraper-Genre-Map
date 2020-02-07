@@ -188,6 +188,7 @@ CUSTOM ITEMS (SPECIFIC CLASS AND ID STYLING)
         padding-left: .5rem;
         font-size: 1.1rem;
         font-family: 'Heebo', sans-serif;
+        line-height: 1.5;
     }
     #map-overlay {
         color: #030303;
