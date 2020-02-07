@@ -102,6 +102,8 @@ CUSTOM ITEMS (SPECIFIC CLASS AND ID STYLING)
     margin-left: 3.5rem;
     margin-bottom: 1rem;
 }
+
+
 #trackingGenre{
    color: #C4FA70;
    margin-left: 2rem;
@@ -151,6 +153,7 @@ CUSTOM ITEMS (SPECIFIC CLASS AND ID STYLING)
     }
 #searchGenre{
     float: right;
+    background: #030303;
     }
 
     @media only screen and (max-width: 1200px) {
