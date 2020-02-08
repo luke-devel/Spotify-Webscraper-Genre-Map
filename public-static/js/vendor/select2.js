@@ -131,61 +131,61 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
       // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
       data: data,
-      cluster: true,
-      clusterMaxZoom: 18, // Max zoom to cluster points on
-      clusterRadius: 6, // Radius of each cluster when clustering points (defaults to 50)
+      // cluster: true,
+      clusterMaxZoom: 14, // Max zoom to cluster points on
+      clusterRadius: 14, // Radius of each cluster when clustering points (defaults to 50)
       // clusterProperties: { 
       //   'point_count': ['+', ['case', point_count, 1, 0]]
       //  }
     });
 
-    map.addLayer({
-      id: 'clusters',
-      type: 'circle',
-      source: 'earthquakes',
+    // map.addLayer({
+    //   id: 'clusters',
+    //   type: 'circle',
+    //   source: 'earthquakes',
      
-      filter: ['has', 'point_count'],
-            paint: {
-              'circle-opacity': .6,
+    //   filter: ['has', 'point_count'],
+    //         paint: {
+    //           'circle-opacity': .6,
 
-        // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-        // with three steps to implement three types of circles:
-        //   * Blue, 20px circles when point count is less than 100
-        //   * Yellow, 30px circles when point count is between 100 and 750
-        //   * Pink, 40px circles when point count is greater than or equal to 750
-        'circle-color': [
-          'step',
-          ['get', 'point_count'],
+    //     // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+    //     // with three steps to implement three types of circles:
+    //     //   * Blue, 20px circles when point count is less than 100
+    //     //   * Yellow, 30px circles when point count is between 100 and 750
+    //     //   * Pink, 40px circles when point count is greater than or equal to 750
+    //     'circle-color': [
+    //       'step',
+    //       ['get', 'point_count'],
           
-          '#514EA3',
-          100000,
-          '#C4FA70',
-          130000,
-          '#4A8C7B',
-          180000,
-          '#f28cb1',
-          300000,
-          '#E21C30',
-        ],
-        'circle-radius': [
-          'step',
-          ['get', 'point_count'],
-  
-        
-          1,
-          1,
-          15,
-          20000,
-          30,
-          500000,
-          45,
-          1000000,
-          60,
-         
-        ]
-      },
+    //       '#514EA3',
+    //       10,
+    //       // '#C4FA70',
+    //       // 100,
+    //       '#4A8C7B',
+    //       180,
+    //       '#f28cb1',
+    //       30000,
+    //       '#E21C30',
+    //     ],
+    //     'circle-radius': [
+    //       'step',
+    //       ['get', 'point_count'],
     
-    });
+          
+    //       10,
+    //       1000,
+    //       10,
+    //       130000,
+    //       20,
+    //       180000,
+    //       30,
+    //       300000,
+    //       40,
+         
+    //     ]
+    //   },
+    
+    // });
     
     // THIS IS THE MAP FUNCTION TO WORK ON!!!
     map.addLayer({
@@ -195,7 +195,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
      
       filter: ['has', 'point_count'],
             paint: {
-              'circle-opacity': .4,
+              'circle-opacity': .65,
 
         // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
         // with three steps to implement three types of circles:
@@ -205,33 +205,32 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
         'circle-color': [
           'step',
           ['get', 'point_count'],
-          
-          
-        
+           
           '#514EA3',
-          100000,
+          1,
           '#C4FA70',
-          400000,
+          100000,
           '#4A8C7B',
-          600000,
+          500000,
           '#f28cb1',
-          800000,
+          1000000,
           '#E21C30',
         ],
         'circle-radius': [
           'step',
+          
           ['get', 'point_count'],
-  
-        
-          // 10,
-          // 1,
-          // 15,
-          // 20000,
-          // 2000,
-          // 500000,
-          // 25,
-          // 1000000,
-          // 30,
+    
+          
+          8,
+          100,
+          10,
+          1500,
+          10,
+          10000,
+          20,
+          300000,
+          20,
          
         ]
       },
@@ -319,47 +318,47 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
     //   }
     // });
 
-  //  map.addLayer({
-  //     id: 'cluster-count',
-  //     type: 'symbol',
-  //     source: 'earthquakes',
-  //     filter: ['has', 'point_count'],
-  //     layout: {
-  //       'text-field': '{point_count_abbreviated}',
-  //       'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-  //       'text-size': 14
-  //     },
-  //     // 'circle-color': [
-  //     //   'step',
-  //     //   ['get', 'point_count'],
+   map.addLayer({
+      id: 'cluster-count',
+      type: 'symbol',
+      source: 'earthquakes',
+      filter: ['has', 'point_count'],
+      layout: {
+        'text-field': '{point_count_abbreviated}',
+        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': 14
+      },
+      // 'circle-color': [
+      //   'step',
+      //   ['get', 'point_count'],
         
-  //     //   '#4A8C7B',
-  //     //   100,
-  //     //   '#C4FA70',
-  //     //   1000,
-  //     //   '#f28cb1',
-  //     //   1000000,
-  //     //   '#514EA3',
-  //     //   10000000,
-  //     //   '#020202'
-  //     // ],
-  //     // 'circle-radius': [
-  //     //   'step',
-  //     //   ['get', 'point_count'],
+      //   '#4A8C7B',
+      //   100,
+      //   '#C4FA70',
+      //   1000,
+      //   '#f28cb1',
+      //   1000000,
+      //   '#514EA3',
+      //   10000000,
+      //   '#020202'
+      // ],
+      // 'circle-radius': [
+      //   'step',
+      //   ['get', 'point_count'],
 
-  //     //   5,
-  //     //   0,
-  //     //   10,
-  //     //   100,
-  //     //   15,
-  //     //   1000,
-  //     //   20,
-  //     //   10000,
-  //     //   25,
-  //     //   100000,
-  //     //   30
-  //     // ]
-  //   })
+      //   5,
+      //   0,
+      //   10,
+      //   100,
+      //   15,
+      //   1000,
+      //   20,
+      //   10000,
+      //   25,
+      //   100000,
+      //   30
+      // ]
+    })
 
   
   })
