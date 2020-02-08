@@ -132,7 +132,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
       data: data,
       // cluster: true,
-      clusterMaxZoom: 14, // Max zoom to cluster points on
+      clusterMaxZoom: 6, // Max zoom to cluster points on
       clusterRadius: 14, // Radius of each cluster when clustering points (defaults to 50)
       // clusterProperties: { 
       //   'point_count': ['+', ['case', point_count, 1, 0]]
@@ -207,30 +207,30 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
           ['get', 'point_count'],
            
           '#514EA3',
-          1,
+          1000,
           '#C4FA70',
-          100000,
+          10000,
           '#4A8C7B',
-          500000,
+          25000,
           '#f28cb1',
-          1000000,
+          100000,
           '#E21C30',
+          // 1000000
         ],
         'circle-radius': [
           'step',
           
           ['get', 'point_count'],
-    
-          
-          8,
-          100,
-          10,
-          1500,
-          10,
-          10000,
-          20,
-          300000,
-          20,
+         
+          11,
+          1,
+          14,
+          5000,
+          17,
+          25000,
+          22,
+          100000,
+          27,
          
         ]
       },
