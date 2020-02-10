@@ -1,5 +1,16 @@
 // import { stringify } from "querystring";
 
+function titleCase(str) {
+  var splitStr = str.toLowerCase().split(' ');
+  for (var i = 0; i < splitStr.length; i++) {
+    // You do not need to check if i is larger than splitStr length, as your for does that for you
+    // Assign it back to the array
+    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+  }
+  // Directly return the joined string
+  return splitStr.join(' ');
+}
+
 $(document).ready(function () {
   $("currentlyTracking").hide();
 
@@ -36,7 +47,7 @@ $(document).ready(function () {
             //PICK UP HERE!!!!!
 
             if ((data[id].name).match(inputText)) {
-              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${data[id].name}"> <option>${data[id].name}</option></a>`);
+              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${titleCase(data[id].name)}"> <option>${titleCase(data[id].name)}</option></a>`);
             }
             else {
               console.log("your input does not call up any genres");
@@ -103,7 +114,9 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
-  $("#trackingGenre").html("Currently Mapping - Monthly listeners of genre: " + this.text)
+
+
+  $("#trackingGenre").html("Monthly Spotify listeners of Genre: " + titleCase(this.text))
   genreID = this.id;
   userSelectedGenre = this.text;
   // console.log(genreID);
