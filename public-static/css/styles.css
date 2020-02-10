@@ -95,12 +95,17 @@ CUSTOM ITEMS (SPECIFIC CLASS AND ID STYLING)
 .w3-bar {
     height: 7.5rem;
     border-bottom: .1rem solid #FF8AE3;
-  
+    
 }
 .w3-bar-item {
     font-family: 'Heebo', sans-serif;
     margin-left: 3.5rem;
     margin-bottom: 1rem;
+    color: #C4FA70;
+    
+}
+.row w3-black {
+    margin-bottom: 0px;
 }
 #trackingGenre{
    color: #C4FA70;
