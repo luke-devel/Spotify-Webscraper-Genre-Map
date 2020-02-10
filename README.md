@@ -21,7 +21,7 @@ See the number of listeners worldwide currently listening to this genre
 
 ## Deployment
 
-Deployed to Heroku 
+Deployed to Heroku - https://project-2-spotify.herokuapp.com/
 
 ## Built With
 
