@@ -1,59 +1,73 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Spotify Genre Map</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--MATERIALIZE WEB COMPONENTS LINKS-->
-    <link rel=”stylesheet” href=”https://unpkg.com/material-components-web/dist/material-components-web.min.css">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!--MATERIAL ICONS-->
-    <link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">  
-    <!--MATERIALIZE CSS-->
-    <link rel = "stylesheet"  
-       href = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">  
-    <!--CUSTOM CSS-->
-    <link rel = "stylesheet"
-       type = "text/css"
-       href = "./css/styles.css" />
-    <!--JQUERY-->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <!--GOOGLE FONTS-->
-    <link href="https://fonts.googleapis.com/css?family=Cabin|Heebo|Noto+Serif+SC&display=swap" rel="stylesheet">
-    <!-- Compiled and minified Materialize CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <!--This is the installantion CDN link and script for Select2-->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-    <!-- Compiled and minified Materialize JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-          <!--MATERIALIZE JS-->  
+<head>
+  <meta charset="UTF-8">
+  <title>Spotify Genre Map</title>
 
-    <!--MAPBOX HEAD SCRIPT-->
-    <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
-    <script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--MATERIALIZE WEB COMPONENTS LINKS-->
+  <link rel=”stylesheet” href=”https://unpkg.com/material-components-web/dist/material-components-web.min.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!--MATERIAL ICONS-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!--MATERIALIZE CSS-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+  <!--CUSTOM CSS-->
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <!--JQUERY-->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <!--GOOGLE FONTS-->
+  <link href="https://fonts.googleapis.com/css?family=Cabin|Heebo|Noto+Serif+SC&display=swap" rel="stylesheet">
+  <!-- Compiled and minified Materialize CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!--This is the installantion CDN link and script for Select2-->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+  <!-- Compiled and minified Materialize JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!--MATERIALIZE JS-->
 
-<!--
+  <!--MAPBOX HEAD SCRIPT-->
+  <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+  <script src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet' />
+
+  <!--
 /*
     ==============================================================
      THIS STYLE CODE IS PLACING MAPBOX IN THE DIV id="map"
     ==============================================================
 */
 -->
- <style>
-    body { margin: 0; padding: 0; }
-    #map { position: absolute; height: 100%; width: 100%; }
-    #mapInfoDiv { position: absolute; height: 100%; width: 25%; right : 0 }
-    ul.dropdown-menu{
-    position:static;
-    float:none;
-    width:20rem;
-  }
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
 
-/*
+    #map {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+    }
+
+    #mapInfoDiv {
+      position: absolute;
+      height: 100%;
+      width: 25%;
+      right: 0
+    }
+
+    ul.dropdown-menu {
+      position: static;
+      float: none;
+      width: 20rem;
+    }
+
+    /*
     ==============================================================
       CUSTOM CSS BEGINS / FONTS
     ==============================================================
@@ -61,99 +75,106 @@
 
 
 
-.map-overlay {
-        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        position: absolute;
-        width: 25%;
-        top: 200px;
-        left: 0;
-        padding: 2px;
-        
+    .map-overlay {
+      font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      position: absolute;
+      width: 25%;
+      top: 200px;
+      left: 0;
+      padding: 2px;
+
     }
 
     .map-overlay .map-overlay-inner {
-        background-color: #f6f6f6;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        border-radius: 3px;
-        padding: 10px;
-        filter: opacity( 0.8);
-        margin-bottom: 10px;
+      background-color: #f6f6f6;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+      padding: 10px;
+      filter: opacity(0.8);
+      margin-bottom: 10px;
     }
 
     .map-overlay h2 {
-        line-height: 24px;
-        display: block;
-        
-        margin: 0 0 10px;
+      line-height: 24px;
+      display: block;
+
+      margin: 0 0 10px;
     }
 
     .map-overlay .legend .bar {
-        height: 10px;
-        width: 100%;
-        background: linear-gradient(to right, #fca107, #7f3121);
+      height: 10px;
+      width: 100%;
+      background: linear-gradient(to right, #fca107, #7f3121);
     }
 
     .map-overlay input {
-        background-color: transparent;
-        display: inline-block;
-        width: 100%;
-        position: relative;
-        margin: 0;
-       
-        cursor: ew-resize;
-        
+      background-color: transparent;
+      display: inline-block;
+      width: 100%;
+      position: relative;
+      margin: 0;
+
+      cursor: ew-resize;
+
     }
 
- 
 
-    #searchGenre{
-    float: right;
-    right: 3rem;
-    filter: opacity( 0.8);
-    filter: color(#FF8AE3);
+
+    #searchGenre {
+      float: right;
+      right: 3rem;
+      filter: opacity(0.8);
+      filter: color(#FF8AE3);
 
     }
 
     #clickedCluster {
       text-align: left;
     }
-
-    </style>
-    </head>
+  </style>
+</head>
 
 <!--
   ================================================================
     TOP ROW HORIZONTAL NAVBAR
   ================================================================
---> 
-<body>
-    
-  <div class="w3-bar w3-black w3-xlarge">
-      <!-- <a class="foo-button mdc-button w3-bar-item w3-button" href="#"><i class="fa fa-bars"></i></a> -->
-      <span class="w3-bar-item"><h2>Spotify Genre Map</h2></span>  
-    </div>
+-->
 
-        <form class="row w3-black">
-          <div class="col s6" style="height:5rem;" id="currentlyTracking" ><h4 id="trackingGenre"></h4>
-          </div>
-          <!-- <div class="input-field col s1" id="clickedCluster" style="overflow:auto; height:5rem;"> 
-          </div> -->
-          <div class="input-field col s5" id="searchGenre">  
-          <select id="genre_name genre-input" class="form-control js-example-data-ajax" aria-hidden="true" multiple="multiple" method="GET">
-          
-          
-          </select>
-        </div>
-      </form>
-       
+<body>
+
+  <div class="w3-bar w3-black w3-xlarge" style="
+  padding-bottom: 120px;">
+    <!-- <a class="foo-button mdc-button w3-bar-item w3-button" href="#"><i class="fa fa-bars"></i></a> -->
+    <span class="w3-bar-item">
+      <h2>Spotify Genre Map</h2>
+    </span>
   </div>
- 
-<!--
+
+  <form class="row w3-black" style="
+  margin-bottom: 0px;">
+    <div class="col s6" style="height:5rem;" id="currentlyTracking">
+      <h4 id="trackingGenre" style="
+      margin-left: 60px;"></h4>
+    </div>
+    <!-- <div class="input-field col s1" id="clickedCluster" style="overflow:auto; height:5rem;"> 
+          </div> -->
+    <div class="input-field col s5" id="searchGenre">
+      <select id="genre_name genre-input" class="form-control js-example-data-ajax" aria-hidden="true"
+        multiple="multiple" method="GET">
+
+
+      </select>
+    </div>
+  </form>
+
+  </div>
+
+  <!--
   ================================================================
     THIS IS THE ACTUAL MAP
   ================================================================
 -->
-  <div class="col s12" id='map' ></div>
+  <div class="col s12" id='map'></div>
   <!--
   ================================================================
     THIS IS THE RIGHT-HAND SIDE-NAV
@@ -164,21 +185,23 @@
   <div class="row w3-black">
     <div class="col s3 w3-black" id="mapInfoDiv" style="overflow:auto">
       <h4 id="instructions">Instructions:</h4>
-      <h5 id="instructionsBody">Spotify Genre Map tracks listener counts across Spotify's 3,800 genres. Enter a search term above to populate a list of genres. Then, click on the genre's name to create a cluster map of Spotify listeners.</h5>
+      <h5 id="instructionsBody">Spotify Genre Map tracks listener counts across Spotify's 3,800 genres. Enter a search
+        term above to populate a list of genres. Then, click on the genre's name to create a cluster map of Spotify
+        listeners.</h5>
     </div>
-  </div>  
+  </div>
 
-<script src="/Users/matthewreilly/Desktop/Development/project-2-spotify/public-static/js/vendor/mapbox.js"></script>
-<script src="./js/vendor/select2.js"></script>
-<script src="./js/vendor/mapbox.js"></script>
+  <script src="/Users/matthewreilly/Desktop/Development/project-2-spotify/public-static/js/vendor/mapbox.js"></script>
+  <script src="./js/vendor/select2.js"></script>
+  <script src="./js/vendor/mapbox.js"></script>
 
-<!-- <script src="../controllers/oauth.js"></script> -->
-<script>
-  $("#genre-submit").on("click", function (event){ 
-    console.log($("#genre-submit").val());
-  });
-</script>
+  <!-- <script src="../controllers/oauth.js"></script> -->
+  <script>
+    $("#genre-submit").on("click", function (event) {
+      console.log($("#genre-submit").val());
+    });
+  </script>
 
 </body>
-</html>
 
+</html>

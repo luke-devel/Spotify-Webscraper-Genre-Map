@@ -103,7 +103,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
-  $("#trackingGenre").html("currently mapping: " + this.text)
+  $("#trackingGenre").html("Currently Mapping - Monthly listeners of genre: " + this.text)
   genreID = this.id;
   userSelectedGenre = this.text;
   // console.log(genreID);
