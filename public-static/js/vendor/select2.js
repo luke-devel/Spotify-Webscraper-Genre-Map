@@ -1,224 +1,225 @@
-// import { stringify } from "querystring";
+/* 
+=============================================================
+CSS RESET
+=============================================================
+*/
 
-function titleCase(str) {
-  var splitStr = str.toLowerCase().split(' ');
-  for (var i = 0; i < splitStr.length; i++) {
-    // You do not need to check if i is larger than splitStr length, as your for does that for you
-    // Assign it back to the array
-    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-  }
-  // Directly return the joined string
-  return splitStr.join(' ');
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
-$(document).ready(function () {
-  $("currentlyTracking").hide();
 
-  // THE VARIABLE BELOW IS THE INTEGER ID# of USER'S CHOSEN GENRE
-  var userSelectedGenre;
-  var genreID;
+/* 
+=============================================================
+FONTS
+=============================================================
+*/
 
-  $(".js-example-data-ajax").select2({
-    ajax: {
-      url: "api/genre",
-      dataType: 'json',
-      delay: 250,
-      AccessControlAllowOrigin: 'http://localhost:8080',
-      // data: function (params) {
-      //   return {
-      //     q: params.term, // search term
-      //   };
-      // },
-      processResults: function (data, params) {
-        var id;
+h1 { 
+    font-family: 'Heebo', sans-serif;
+}
+h2 {
+    font-family: 'Cabin', sans-serif;
+}
+h3 {
+    font-family: 'Heebo', sans-serif;
+    font-size: 2rem;
+}
+h4 {
+    font-family: 'Cabin', sans-serif;
+   
+}
+p {
+    font-family: 'Noto Serif SC', serif;
+}
+option {
+    color: #C4FA70; 
+    font-family: 'Heebo', sans-serif;
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+body {
+    background-color: #030303;
+}
 
-        $(".select2-search__field").keydown(function autoFill() {
+/* 
+=============================================================
+CUSTOM ITEMS (SPECIFIC CLASS AND ID STYLING)
+=============================================================
+*/
+.w3-bar {
+    height: 7.5rem;
+    border-bottom: .1rem solid #FF8AE3;
+  
+}
+.w3-bar-item {
+    font-family: 'Heebo', sans-serif;
+    margin-left: 3.5rem;
+    margin-bottom: 1rem;
+}
 
-          $("#mapInfoDiv").empty();
 
-          console.log(data)
-          // console.log(data.results)
-          var inputText = $("input").val();
-          console.log(inputText);
-          // var loopStop = 0;
-          for (id = 0; id < data.length; id++) {
-            console.log(inputText);
+#trackingGenre{
+   color: #C4FA70;
+   margin-left: 2rem;
+   padding-bottom: 2rem;
+   font-size: 2rem;
+};
+.select2-container {
+    margin-right: .5rem;
+ 
+}
 
-            //PICK UP HERE!!!!!
+#month.textContent{
+    color: #030303;
+    font-size: 1.2rem;
 
-            if ((data[id].name).match(inputText)) {
-              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${titleCase(data[id].name)}"> <option>${titleCase(data[id].name)}</option></a>`);
-            }
-            else {
-              console.log("your input does not call up any genres");
-            }
+} 
+#slider {
+    color: #E52797;
+}
+#sliderHead {
+  color: #030303;
+  font-size: 1.4rem;
+  color: #E52797;
+}
+#instructions{
+    font-size: 2rem;
+    color: #C4FA70;
+    /* filter: opacity( 0.9);
+    filter: color(#FF8AE3); */
 
-          };
-        });
+}
 
-        // parse the results into the format expected by Select2
-        // since we are using custom formatting functions we do not need to
-        // alter the remote JSON data, except to indicate that infinite
-        // scrolling can be used
-        params.page = params.page || 1;
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        console.log(params.page);
+#instructionsBody {
+    padding-left: 1rem;
+    font-size: 1.3rem;
+    font-family: 'Heebo', sans-serif;
+    filter: opacity( 0.95);
+    filter: color(#FF8AE3);
+}
+.js-example-data-ajax {
+    height:1.5rem;
+}
 
-        return {
-          results: data,
-          pagination: {
-            more: (params.page * 30) < data.total_count,
-          }
-        };
-      },
-      cache: true
-
-    },
-    placeholder: 'Search Genres',
-
-    minimumInputLength: 1,
-    templateResult: formatResults,
-    templateSelection: formatResultsSelection,
-
-  });
-  // This are left over from documentation /setup... 
-  // These functions are currently blocking the dropdown menu for selections, and
-  // this is probably preferable. 
-  function formatResults(repo) {
-    if (repo.loading) {
-      // return repo.text;
+#currentlytracking{
+    padding-bottom: .5rem;
+    
+}
+    .select2 {
+        margin-right: 2rem;
+ 
+    }
+#searchGenre{
+    float: right;
+    background: #030303;
     }
 
-  }
-  function formatResultsSelection(repo) {
-    if (repo.loading) {
-      // return repo.text;
+    @media only screen and (max-width: 1200px) {
+ 
+   #searchGenre {
+        padding-right: 1rem;
     }
-    // return repo.full_name || repo.text;
-  }
-
-});
-$.fn.select2.defaults.set('amdBase', 'select2/');
-$.fn.select2.defaults.set('amdLanguageBase', 'select2/i18n/');
-
-$(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGenre, genreID) {
-  $("#currentlyTracking").show();
-
-  // / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
-  // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-  if (map.getLayer('clusters')) map.removeLayer('clusters');
-  if (map.getLayer('cluster-count')) map.removeLayer('cluster-count');
-  if (map.getLayer('unclustered-point')) map.removeLayer('unclustered-point');
-  if (map.getLayer('earthquake-labels')) map.removeLayer('earthquake-labels');
-
-  // / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
-  // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
-
-
-
-  $("#trackingGenre").html("Monthly Spotify listeners of Genre: " + titleCase(this.text))
-  genreID = this.id;
-  userSelectedGenre = this.text;
-  // console.log(genreID);
-  // console.log(userSelectedGenre);
-
-  $.get('/api/genre/' + this.text.trim()).then(data => {
-    // console.log(data);
-
-    try {
-      map.removeSource('earthquakes');
-    } catch (e) {
-      console.log(e);
-      console.log("IN THE CATCH BLOCK");
+}
+    @media only screen and (max-width: 850px) {
+ 
+        #searchGenre {
+            padding-right: 1rem;
+        }
     }
-
-    map.addSource('earthquakes', {
-      type: 'geojson',
-      // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
-      // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
-      data: data,
-      // clusterMaxZoom: 10, // Max zoom to cluster points on
-      // clusterRadius: 14, // Radius of each cluster when clustering points (defaults to 50)
-
-    });
-
-    // THIS IS THE MAP FUNCTION TO WORK ON!!!
-    map.addLayer({
-      id: 'clusters',
-      type: 'circle',
-      source: 'earthquakes',
-
-      filter: ['has', 'point_count'],
-      paint: {
-        'circle-opacity': .65,
-
-        // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-        // with three steps to implement three types of circles:
-        //   * Blue, 20px circles when point count is less than 100
-        //   * Yellow, 30px circles when point count is between 100 and 750
-        //   * Pink, 40px circles when point count is greater than or equal to 750
-        'circle-color': [
-          'step',
-          ['get', 'point_count'],
-
-          '#514EA3',
-          1000,
-          '#0A6CAC',
-          3000,
-          '#0F2CA4',
-          5000,
-          '#27770B',
-          15000,
-          '#DEBB56',
-          25000,
-          '#F37B54',
-          100000,
-          '#E21C30',
-
-        ],
-        'circle-radius': [
-          'step',
-          ['get', 'point_count'],
-
-          18,
-          1000,
-          22,
-          3000,
-          25,
-          5000,
-          27,
-          15000,
-          32,
-          25000,
-          37,
-          100000,
-          42,
-
-        ]
-      },
-    });
-
-    // THIS IS THE LAYER WITH TEXT TAGS THAT NEEDS TO UPDATE
-    map.addLayer({
-      'id': 'earthquake-labels',
-      'type': 'symbol',
-
-      'source': 'earthquakes',
-      'layout': {
-        'text-field': [
-          'concat',
-          ['to-string', ['get', 'point_count']],
-          ''
-        ],
-        'text-font': [
-          'Open Sans Bold',
-          'Arial Unicode MS Bold'
-        ],
-        'text-size': 15
-      },
-      'paint': {
-        'text-color': '#FFFFFF'
+    @media only screen and (max-width: 700px) {
+ 
+        #searchGenre {
+            margin-right: 2rem;
+        }
+    }
+@media only screen and (max-width: 500px) {
+    #searchGenre {
+        margin-right: .4rem;
+    }
+    #trackingGenre {
+        margin-right: .3rem;
+    }
+    #instructions{
+        font-size: 1.2rem;
+        color: #C4FA70;
+    }
+    #instructionsBody {
+        padding-left: .5rem;
+        font-size: 1.1rem;
+        font-family: 'Heebo', sans-serif;
+    }
+    #map-overlay {
+        color: #030303;
+        size: 1.5;
+        font-size: .8rem;
       }
-    });
-  })
-});
+    #month {
+        font-size: .7rem;
+    }
+    #searchGenre{
+        float: right;
+        /* margin-right: .3rem; */
+        }
+    #slider {
+        background-color: #E52797;
+    }
+    #sliderHead {
+      color: #E52797;
+      font-size: .8rem;
+    }
+    #trackingGenre {
+        font-size: 1.5rem;
+        width: 50%;
+        margin-bottom: .3rem;
+    }
+ 
+    option {
+        font-size: 1.1rem;
+    }
+  }
