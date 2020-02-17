@@ -1,16 +1,5 @@
 // import { stringify } from "querystring";
 
-function titleCase(str) {
-  var splitStr = str.toLowerCase().split(' ');
-  for (var i = 0; i < splitStr.length; i++) {
-    // You do not need to check if i is larger than splitStr length, as your for does that for you
-    // Assign it back to the array
-    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-  }
-  // Directly return the joined string
-  return splitStr.join(' ');
-}
-
 $(document).ready(function () {
   $("currentlyTracking").hide();
 
@@ -47,7 +36,7 @@ $(document).ready(function () {
             //PICK UP HERE!!!!!
 
             if ((data[id].name).match(inputText)) {
-              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${titleCase(data[id].name)}"> <option>${titleCase(data[id].name)}</option></a>`);
+              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${data[id].name}"> <option>${data[id].name}</option></a>`);
             }
             else {
               console.log("your input does not call up any genres");
@@ -66,6 +55,7 @@ $(document).ready(function () {
 
         return {
           results: data,
+         
           pagination: {
             more: (params.page * 30) < data.total_count,
           }
@@ -75,7 +65,7 @@ $(document).ready(function () {
 
     },
     placeholder: 'Search Genres',
-
+    
     minimumInputLength: 1,
     templateResult: formatResults,
     templateSelection: formatResultsSelection,
@@ -114,9 +104,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
-
-
-  $("#trackingGenre").html("Monthly Spotify listeners of Genre: " + titleCase(this.text))
+  $("#trackingGenre").html("currently mapping this month's listener numbers in the top 50 cities for " + this.text)
   genreID = this.id;
   userSelectedGenre = this.text;
   // console.log(genreID);
@@ -138,19 +126,33 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
       data: data,
       // clusterMaxZoom: 10, // Max zoom to cluster points on
-      // clusterRadius: 14, // Radius of each cluster when clustering points (defaults to 50)
+      clusterRadius: 100, // Radius of each cluster when clustering points (defaults to 50)
 
     });
 
+
+
+
+
+
+
+
+
+
+
+
+    
     // THIS IS THE MAP FUNCTION TO WORK ON!!!
     map.addLayer({
       id: 'clusters',
       type: 'circle',
       source: 'earthquakes',
-
+      cluster: true,
+      clusterRadius: 40,
+      // minzoom: 8,
       filter: ['has', 'point_count'],
       paint: {
-        'circle-opacity': .65,
+        'circle-opacity': .85,
 
         // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
         // with three steps to implement three types of circles:
@@ -163,16 +165,16 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
 
           '#514EA3',
           1000,
-          '#0A6CAC',
+          '#4A8C7B',
           3000,
-          '#0F2CA4',
-          5000,
-          '#27770B',
-          15000,
-          '#DEBB56',
+          '#C4FA70',
+          10000,
+          '#f28cb1',
           25000,
-          '#F37B54',
-          100000,
+          '#ED349F',
+          50000,
+          '#FFA500',
+          150000,
           '#E21C30',
 
         ],
@@ -180,45 +182,55 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
           'step',
           ['get', 'point_count'],
 
-          18,
+          10,
           1000,
-          22,
+          12,
           3000,
-          25,
+          13,
           5000,
-          27,
+          17,
           15000,
-          32,
+          23,
           25000,
-          37,
+          27,
           100000,
-          42,
+          30,
 
         ]
       },
     });
 
+
+
+    
     // THIS IS THE LAYER WITH TEXT TAGS THAT NEEDS TO UPDATE
     map.addLayer({
       'id': 'earthquake-labels',
       'type': 'symbol',
-
-      'source': 'earthquakes',
+      'source': 'earthquakes',      
       'layout': {
         'text-field': [
           'concat',
           ['to-string', ['get', 'point_count']],
+          ['to-string', ['get', 'place']],
           ''
         ],
         'text-font': [
           'Open Sans Bold',
           'Arial Unicode MS Bold'
         ],
-        'text-size': 15
+        'text-size': 15,
+        
       },
+      'text-field': ['get', 'place'],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      // 'text-radial-offset': 50,
+      'text-justify': 'auto',
+
       'paint': {
         'text-color': '#FFFFFF'
-      }
+      },
+      
     });
   })
 });
