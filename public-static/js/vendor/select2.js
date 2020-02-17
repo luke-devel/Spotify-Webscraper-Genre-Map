@@ -1,5 +1,17 @@
 // import { stringify } from "querystring";
 
+function titleCase(str) {
+  var splitStr = str.toLowerCase().split(' ');
+  for (var i = 0; i < splitStr.length; i++) {
+    // You do not need to check if i is larger than splitStr length, as your for does that for you
+    // Assign it back to the array
+    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+  }
+  // Directly return the joined string
+  return splitStr.join(' ');
+}
+
+
 $(document).ready(function () {
   $("currentlyTracking").hide();
 
@@ -36,7 +48,7 @@ $(document).ready(function () {
             //PICK UP HERE!!!!!
 
             if ((data[id].name).match(inputText)) {
-              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${data[id].name}"> <option>${data[id].name}</option></a>`);
+              $("#mapInfoDiv").append(`<a class="chosenGenre" id=${id} data-name="${titleCase(data[id].name)}"> <option>${titleCase(data[id].name)}</option></a>`);
             }
             else {
               console.log("your input does not call up any genres");
@@ -55,7 +67,7 @@ $(document).ready(function () {
 
         return {
           results: data,
-         
+
           pagination: {
             more: (params.page * 30) < data.total_count,
           }
@@ -65,7 +77,7 @@ $(document).ready(function () {
 
     },
     placeholder: 'Search Genres',
-    
+
     minimumInputLength: 1,
     templateResult: formatResults,
     templateSelection: formatResultsSelection,
@@ -104,7 +116,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
   // / / / / / / / / / / / / / / / / / / / / / / / / / / / / / 
 
-  $("#trackingGenre").html("currently mapping this month's listener numbers in the top 50 cities for " + this.text)
+  $("#trackingGenre").html("Monthly listeners of Genre: " + titleCase(this.text))
   genreID = this.id;
   userSelectedGenre = this.text;
   // console.log(genreID);
@@ -141,7 +153,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
 
 
 
-    
+
     // THIS IS THE MAP FUNCTION TO WORK ON!!!
     map.addLayer({
       id: 'clusters',
@@ -202,12 +214,12 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
 
 
 
-    
+
     // THIS IS THE LAYER WITH TEXT TAGS THAT NEEDS TO UPDATE
     map.addLayer({
       'id': 'earthquake-labels',
       'type': 'symbol',
-      'source': 'earthquakes',      
+      'source': 'earthquakes',
       'layout': {
         'text-field': [
           'concat',
@@ -220,7 +232,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
           'Arial Unicode MS Bold'
         ],
         'text-size': 15,
-        
+
       },
       'text-field': ['get', 'place'],
       'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
@@ -230,7 +242,7 @@ $(document).on("click", ".chosenGenre", function userGenreChoice(userSelectedGen
       'paint': {
         'text-color': '#FFFFFF'
       },
-      
+
     });
   })
 });
