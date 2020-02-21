@@ -18,35 +18,31 @@ request('http://everynoise.com/new_releases_by_genre.cgi', (error, response, htm
 
         $('.genre a').each((i, el) => {
             // ignores first 4 links
+            // if (i >= 4 && i <= 5) {
             if (i == 4) {
                 //const item = $(el).text();
                 const link = $(el).attr('href');
-                console.log(`http://everynoise.com/new_releases_by_genre.cgi${link}`);
+                console.log(`http://everynoise.com/new_releases_by_genre.cgi${link}\n`);
 
                 request(`http://everynoise.com/new_releases_by_genre.cgi${link}`, (error, response, html) => {
                     if (!error && response.statusCode == 200) {
+                        const $ = cheerio.load(html);
+
+                        // fs.File('./result.json', `${html} \n`, function (err) {
+                        //     if (err) { console.log(err); }
+                        // })
 
                         $('.albumbox.album a').each((j, ele) => {
-                            const artistLink = $(ele).attr('href');
-                            if (j == 0) {
-                                console.log(artistLink);
-
+                            const artistLink = $(ele).attr('href').slice(29, -10);
+                            if (j < 3 && artistLink) {
+                                console.log(`Spotify id: ${artistLink}`);
                             }
-
                         })
                     }
                 });
-
-                // fs.appendFile('./result.json', `${link} \n`, function (err) {
-                //     if (err) { console.log(err); }
-                // })
             }
-
         })
-
-
-
-
-
     }
 });
+
+
