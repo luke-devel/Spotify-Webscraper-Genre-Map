@@ -12,7 +12,7 @@ const fs = require('fs');
 
 (async function main() {
     try {
-        let urls = [];
+
         var options = {
             uri: 'http://everynoise.com/new_releases_by_genre.cgi',
             transform: function (body) {
@@ -22,63 +22,104 @@ const fs = require('fs');
 
         rp(options)
             .then(function ($) {
+                try {
+                    var urls = [];
+                    $('.genre a').each(async (i, el) => {
+                        try {
 
-                $('.genre a').each(async (i, el) => {
-                    try {
-                        if (i >= 234) {
-                            const link = $(el).attr('href');
-                            //console.log(`http://everynoise.com/new_releases_by_genre.cgi${link}\n`);
-                            var url = `http://everynoise.com/new_releases_by_genre.cgi${link}`;
-                            urls.push(url);
+                            if (i >= 234) {
+                                const link = $(el).attr('href');
+                                var url = `http://everynoise.com/new_releases_by_genre.cgi${link}`;
+                                urls.push(url);
+                            }
+
                         }
-                    }
-                    catch (e) {
-                        console.log(e.message);
-                    }
-                });
-                console.log('done the loop');
-                return urls;
-            }).then(async function (urls) {
-
-                console.log(urls);
-                console.log('done in new loop');
-
-                // ~2467 times
-                for (let i = 0; i < urls.length; i++) {
-
-                    var options2 = {
-                        uri: urls[0],
-                        transform: function (body) {
-                            return cheerio.load(body);
+                        catch (e) {
+                            console.log('err in .genre a loop: ' + e.message);
                         }
-                    };
-
-                    rp(options2)
-                        .then(await function ($) {
-                            // Process html like you would with jQuery...
-                            // loops twice
-                            $('.albumbox.album a').each((j, ele) => {
-                                const artistLink = $(ele).attr('href').slice(29, -10);
-                                if (j < 3 && artistLink) {
-                                    fs.appendFile('./spotifyIDs.json', `${artistLink} \n`, function (err) {
-                                        //console.log(artistLink);
-
-                                        if (err) { console.log(err); }
-                                    })
-                                }
-                            })
-                        })
-                        .catch(function (err) {
-                            console.log('Crawling failed or Cheerio choked...');
-                        });
+                    })
+                    console.log('done the .genre a loop');
+                    return urls;
                 }
+                catch (e) {
+                    console.log('err in first loop: ' + e.message);
+                }
+            }).then(function (urls) {
+                try {
+                    var ids = [];
+                    console.log(`urls length is: ${urls.length}`);
+
+
+                    // ~2467 times
+                    let completed_requests = 0;
+                    for (let i = 0; i < 100; i++) {
+                        try {
+
+                            var options2 = {
+                                uri: urls[i],
+                                transform: function (body) {
+                                    return cheerio.load(body);
+                                }
+                            };
+
+                            rp(options2)
+                                .then(async function ($) {
+                                    //     Process html like you would with jQuery...
+                                    // loops twice
+                                    $('.albumbox.album a').each(await function (j, ele) {
+                                        try {
+                                            const artistLink = $(ele).attr('href').slice(29, -10);
+                                            if (j < 3 && artistLink) {
+                                                ids.push(artistLink);
+                                                completed_requests++;
+
+                                                if (completed_requests == 200) {
+                                                    // All download done, process responses array
+                                                    console.log(ids);
+                                                    console.log(ids.length);
+
+                                                    var result = JSON.stringify(ids);
+
+                                                    fs.writeFile('./spotifyIDs4.json', result, function (err) {
+                                                        console.log("The file was saved!");
+                                                        if (err) { console.log(err); }
+                                                    })
+                                                }
+
+                                            }
+                                        }
+                                        catch{
+                                            console.log(`err at albumbox album a - j: ${j}`);
+
+                                        }
+                                    })
+                                })
+                                .catch(function (err) {
+                                });
+                        }
+                        catch{
+                            console.log(`err at i: ${i} in 2700 for loop`);
+
+                        }
+                    }
+
+
+                }
+                catch{
+                    console.log(`err in new function`);
+                }
+
+            }).then(function (ids) {
+
+
+
             })
             .catch(function (err) {
 
             });
 
     } catch (e) {
-        console.log(e.message);
+        console.log('main function err: ' + e.message);
     }
 
 })();
