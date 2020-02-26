@@ -1,5 +1,5 @@
 // Autoscraper to scrape http://everynoise.com/new_releases_by_genre.cgi using cheerio
-// to populate json with with spotify ID's for artists for all ~ 3000 Spotify genres
+// to populate csv with with spotify ID's for artists for all ~ 3000 Spotify genres
 
 var Promise = require("bluebird");
 const cheerio = require('cheerio');
