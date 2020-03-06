@@ -14,7 +14,7 @@ const spotify = require("./scrape.js");
 const sequelize = new Sequelize(
   "spotify_db",
   "root",
-  "pass",
+  "logmein1440",
   {
     host: "localhost",
     dialect: "mysql"
