@@ -1,21 +1,8 @@
 # Spotify Webscraper Project
 
-This project scrapes data from Spotify's API and uses mapbox visualization tools to render global listener count by genre. It draws inspiration from Glenn McDonald's website, ###[Every Noise at Once](http://everynoise.com/), which analyzes auditory and regional data across several thouaand microgenres on Spotify. Using our Spotify Genre Map project is simple——see the gif below for a quick demo or visit the ###[deployed site](https://project-2-spotify.herokuapp.com/).
+This project uses Google Chrome's headless web brwosing via [Puppeteer](https://developers.google.com/web/tools/puppeteer) and Node.js to scrape the monthly listening info from all ~4000 unique Spotify genres from [Every Noise at Once](http://everynoise.com/) (Website which we gained inspiration from, shout out to **Glenn McDonald**), then we use the top two artists from each genre to populate the monthly listening info from all genres worldwide using [Spotify's Web Player](http://open.spotify.com) and scraping each Artist's pages listening data. This data is Then stored in a MySql database and using Third Normal Form we can visualize the monthly listening data from every genre on Spotify worldwide, at once on the website using Mapbox and GEOJSON data. See the gif below for a quick demo or visit the Deployed Site.
 
 ![](SpotifyGenreMapGif.gif)
-
-
-### Installing
-
-All you need to clone this application is a web browser, SQL database, and terminal. 
-
-Install your node packages. 
-Run your SQL database program, connect to your server. 
-Run server.js
-Navigate to localhost:8080
-Search for your genre, the list will auto-populate
-Choose your genre
-See the number of listeners worldwide currently listening to this genre
 
 
 ## Deployment
@@ -24,7 +11,7 @@ Deployed to Heroku - https://project-2-spotify.herokuapp.com/
 
 ## Built With
 
-
+Puppeteer
 Cheerio
 Node
 Sequelize
@@ -57,5 +44,6 @@ Cooper Pearson
 Copyleft U+00A9 2020
 
 ## Acknowledgments
+* We by no means are connected to **Spotify** in any way. This project was a learning experience and we hold no intent to profit off of this.
 
 * Hat tip to Osei Bonsu, Sangeetha Kaliaperumal
