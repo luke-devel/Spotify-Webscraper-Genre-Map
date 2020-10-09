@@ -73,7 +73,7 @@ var cityToCoord = function (city, country) {
 
     // Assigns queryUrl based on city and country
 
-    let queryUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + city + ' ' + country + '.json?access_token=pk.eyJ1IjoibWF0dGhld2ZyZWlsbHkiLCJhIjoiY2s1dW9mYmR1MWJ0cjNtb25lY240N3oxYyJ9.oUoPX11hY_Rz6ausgTENyw'
+    let queryUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + city + ' ' + country + process.env.MAPBOXAPIKEY;
 
     // Calls api
 

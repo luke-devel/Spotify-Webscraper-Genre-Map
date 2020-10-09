@@ -6,11 +6,14 @@ const models = require('../models');
 
 const router = express.Router();
 
-
+// takes in genre name from client's search
 async function getGenreListeners(name){
     let arrayData = [];
+    // Searches sql db for genre name
     let data = await db.searchGenre(name);
 
+    // Returns obect of spotify listner count for each city from Sequelize query above
+    // We also return the lat and long values of the city
     await data.dataValues.listeners.forEach(function(iter, i){
             let bufferObj = {};
             bufferObj.count = iter.count;
@@ -22,14 +25,17 @@ async function getGenreListeners(name){
     return await arrayData;
 }
 
+// 
 function makePropObj(item){
     let obj = {"properties": { "point_count": item.count}, "geometry":{"type": "Point", "coordinates": [ item.lon, item.lat ]}}
     return obj;
 }
 
+// Takes result data from getGenreListeners(), and converts into a single GEOJSON object for Mapbox
 async function convertToGeo(array){
     let bufferArray = [];
 
+    // 
     await array.forEach(function(iter){
         let bufferObj = makePropObj(iter);
         bufferArray.push(bufferObj);
@@ -46,6 +52,7 @@ router.get('/', (req, res) => res.sendFile(path.join(__dirname, "../public-stati
 
 router.get('/api/genre/:genre',async function(req,res){
     getGenreListeners(req.params.genre).then(function(data){
+        // Data from getGenreListeners() passed to convertToGeo()
         convertToGeo(data).then(function(geoData){
             res.json(geoData);
         })

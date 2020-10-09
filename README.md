@@ -1,4 +1,4 @@
-# Project Title - project-2-spotify
+# Spotify Webscraper Project
 
 This project scrapes data from Spotify's API and uses mapbox visualization tools to render global listener count by genre. It draws inspiration from Glenn McDonald's website, ###[Every Noise at Once](http://everynoise.com/), which analyzes auditory and regional data across several thouaand microgenres on Spotify. Using our Spotify Genre Map project is simple——see the gif below for a quick demo or visit the ###[deployed site](https://project-2-spotify.herokuapp.com/).
 
