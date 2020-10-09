@@ -12,11 +12,11 @@ const spotify = require("./scrape.js");
 /////////////////////////////////////////////
 
 const sequelize = new Sequelize(
-  "spotify_db",
-  "root",
-  "pass",
+  process.env.DB_NAME,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
   {
-    host: "localhost",
+    host: process.env.HOST,
     dialect: "mysql"
   }
 );
@@ -48,7 +48,7 @@ console.log(`
         | « « |   Spotify Artist Auto Web Scraper - Using node.js, puppeteer, cheerio, and sequelize  | » » |
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`);
 
-async function insertrecord(scrapedata) {
+async function RecursiveInsertRecord(scrapedata) {
   console.log(`Next Spotify Artist (id: ${scrapedata.artist_ID}) scrapedata:`);
 
   // Checks if Spotify artist id is empty/undefined
@@ -71,7 +71,7 @@ async function insertrecord(scrapedata) {
         `Artist genre or city data is "undefined", Moving to next id in idsToDo[] object. --> ${idsToDo[0]}`
       );
       let nextID = idsToDo[0].artistID;
-      spotify(idsToDo[0].artistID, insertrecord);
+      spotify(idsToDo[0].artistID, RecursiveInsertRecord);
       idsToDo.shift();
     }
   }
@@ -95,7 +95,7 @@ async function insertrecord(scrapedata) {
           `Artist genre or city data is "undefined", Moving to next id in idsToDo[] object. --> ${idsToDo[0].artistID}`
         );
         let nextID = idsToDo[0].artistID;
-        spotify(idsToDo[0].artistID, insertrecord);
+        spotify(idsToDo[0].artistID, RecursiveInsertRecord);
         idsToDo.shift();
       }
     } else {
@@ -119,12 +119,13 @@ async function insertrecord(scrapedata) {
         }
       }
 
+      // findRelatedArtistID() finds the remaining related artist ID's,
       findRelatedArtistID(scrapedata.relatedArtistIDs);
     }
   }
 }
 
-spotify(initialArtistID, insertrecord);
+spotify(initialArtistID, RecursiveInsertRecord);
 
 // function to return related artist ID that has not a duplicate of current artist id's
 function findRelatedArtistID(relatedArtistIDs) {
@@ -172,7 +173,7 @@ function findRelatedArtistID(relatedArtistIDs) {
             `idsToCheck is empty. Moving to next id in idsToDo[] object. --> ${idsToDo[0].artistID}`
           );
           console.log(`idsToDo length: ${idsToDo.length}`);
-          spotify(idsToDo[0].artistID, insertrecord);
+          spotify(idsToDo[0].artistID, RecursiveInsertRecord);
           idsToDo.shift();
         }
       } else {
@@ -182,7 +183,7 @@ function findRelatedArtistID(relatedArtistIDs) {
           `Id's remaining are non-duplicates, choosing location 0: ${idsToCheck[0].id}`
         );
         console.log(`idsToDo length: ${idsToDo.length}`);
-        spotify(idsToCheck[0].id, insertrecord);
+        spotify(idsToCheck[0].id, RecursiveInsertRecord);
       }
     });
 }

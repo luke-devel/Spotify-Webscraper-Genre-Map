@@ -4,7 +4,7 @@ const fs = require("fs");
 const puppeteerScrapeScriptTag = require("./puppeteerScrapeScriptTag.js");
 const puppeteerScrapeHTML = require("./puppeteerScrapeHTML.js");
 
-async function spotify(artistID, insertrecord) {
+async function spotify(artistID, RecursiveInsertRecord) {
   const $ = await puppeteerScrapeHTML(artistID);
   // creates accessable variables
   let rawSpotifyData;
@@ -72,7 +72,7 @@ async function spotify(artistID, insertrecord) {
           relatedArtistIDs: relatedArtistIDs
         };
         // return scrapedata;
-        insertrecord(scrapedata);
+        RecursiveInsertRecord(scrapedata);
       }
     )
     .catch(function(error) {
